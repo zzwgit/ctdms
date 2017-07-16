@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.jxufe.ctdms.utils.Zip;
 
 @Controller
-public class DocController {
-	private static Logger log = LogManager.getLogger(DocController.class
-			.getName()); 
+public class DocController { 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index() {
 
