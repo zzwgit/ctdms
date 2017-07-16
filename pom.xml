@@ -76,6 +76,12 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 			<artifactId>spring-data-jpa</artifactId>
 			<version>1.10.1.RELEASE</version>
 		</dependency>
+		<!-- spring test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+		  	<artifactId>spring-test</artifactId>
+		  	<version>3.1.1.RELEASE</version>
+		</dependency>
 		<!-- spring security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
