@@ -9,4 +9,6 @@ import com.jxufe.ctdms.bean.User;
 public interface UserDao extends JpaRepository<User, Serializable>{
 
 	User findByUserId(long userId);
+	
+	User findByUserName(String userName);
 }

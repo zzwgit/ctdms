@@ -1,0 +1,36 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd">
+  
+	<http auto-config="true">
+	
+	    <headers>
+	        <frame-options policy="SAMEORIGIN"/>
+	    </headers>  
+		
+		<form-login login-page="/login" login-processing-url="/login2"
+			default-target-url="/notices" username-parameter="userName"
+			password-parameter="passWord" authentication-success-handler-ref="userSuccessHandler"
+			authentication-failure-url="/login?error" />
+		<logout logout-success-url="/login?logout" />
+
+		<!-- enable csrf protection -->
+		<csrf />
+		<remember-me/>
+	</http>
+	<authentication-manager  alias="authenticationManager" erase-credentials="false">
+		<authentication-provider user-service-ref="userDetailsService" >
+		   <password-encoder ref="bcryptEncoder"/> 	
+		</authentication-provider>
+	</authentication-manager> 
+	
+	    
+	
+    <beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<beans:bean id="userDetailsService"
+		class="com.jxufe.ctdms.service.impl.UserDetailServiceImpl" />
+	<beans:bean id="userSuccessHandler" class="com.jxufe.ctdms.config.UserSuccessHandler" />
+</beans:beans>

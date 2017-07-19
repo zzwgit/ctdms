@@ -10,6 +10,11 @@ public class NoticesDto {
 	
 	private List<Notices> notices;
 
+	@Override
+	public String toString() { 
+		return typeName+"-"+notices.toString();
+	}
+	
 	public String getTypeName() {
 		return typeName;
 	}

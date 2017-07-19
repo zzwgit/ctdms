@@ -10,5 +10,5 @@ public interface NoticesService {
 
 	List<NoticesDto> getNoticetsByUserId(long userId);
 	
-	void addNewNotices(long userId,int level ,String title ,String message ,String noticesType);
+	void addNewNotices(long userId,int level ,String title ,String message ,int noticesTypeId);
 }

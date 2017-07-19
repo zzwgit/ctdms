@@ -1,0 +1,20 @@
+ 
+			#iframe{  
+				width: auto;
+				height: 100%;
+			} 
+			
+			.module-frame{
+				border-top: 1px solid #d8dfea;
+			    border-left: 1px solid #d8dfea;
+			    border-right: 1px solid #d8dfea;
+			    margin-left: -1px;    
+			    top: 52px;
+			    left: 152px;
+			    bottom: 0px;
+			    right: 0px;
+			    height:100%;
+			    border-top-left-radius: 5px;
+			    border-top-right-radius: 5px;
+			    position: absolute;
+			}

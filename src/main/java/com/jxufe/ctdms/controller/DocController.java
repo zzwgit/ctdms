@@ -1,21 +1,25 @@
 package com.jxufe.ctdms.controller;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+ 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.jxufe.ctdms.service.DocService;
 import com.jxufe.ctdms.utils.Zip;
 
 @Controller
 public class DocController { 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String index() {
-
-		return "index";
+	@Autowired
+	DocService docService;
+	/**
+	 * 删除文档
+	 */
+	@RequestMapping(value = "{userId}/submit", method = RequestMethod.GET)
+	public String submit(@PathVariable("userId")long userId) { 
+		return "submitdoc";
 	}
- 
 	/**
 	 * 删除文档
 	 */
@@ -26,9 +30,10 @@ public class DocController {
 	/**
 	 * 上传 排课计划  cp(CoursePlan)
 	 */
-	@RequestMapping(value = "cp", method = RequestMethod.PUT)
+	@RequestMapping(value = "cp", method = RequestMethod.GET)
 	public String addCoursePlan() {
 		saveUploadFile();
+		docService.parseExcel();
 		return "";
 	}
 	/**

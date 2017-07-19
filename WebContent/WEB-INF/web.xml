@@ -49,14 +49,10 @@ version="3.0">
     <servlet-name>springmvc</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping> 
-
- 	<filter>
-		 <filter-name>HiddenHttpMethodFilter</filter-name>
-		 <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
-	</filter>
+ 
 	
  	<!-- Spring Security --> 
-	<!-- 
+	
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy
@@ -67,7 +63,7 @@ version="3.0">
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	 -->
+	
 	<!--　浏览器不支持put,delete等method,由该filter将/blog?_method=delete转换为标准的http　delete方法　-->
 	 <filter>
         <filter-name>hiddenHttpMethodFilter</filter-name>

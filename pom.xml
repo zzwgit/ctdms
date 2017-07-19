@@ -140,8 +140,13 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.9</version>
 		</dependency>
-
-		<!-- log4j2 -->
+		<!--  poi --> 
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<!-- log4j2 
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -156,6 +161,6 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-web</artifactId>
 			<version>2.0.2</version>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 </project>
