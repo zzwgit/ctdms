@@ -10,8 +10,7 @@
 			.module-nav {
 				width: 153px; 
 				float:left;
-				z-index:1;
-				position: fixed; 
+				z-index:1; 
 			} 
 			#left_nav a {
 				color: black;
@@ -46,7 +45,7 @@
 				</div>
 		</nav>  
 		<div class="hide-logo">这是一个隐藏的logo</div>
-		<div class="module-nav">
+		<div class="module-nav"  >
 			<ul class="nav nav-pills nav-stacked" id="left_nav"> 
 				<li>
 					<a href="notices">
@@ -115,6 +114,16 @@
 				<li>
 					<a href="javascript:iframeChang('allDoc-frame');">
 						<span class="glyphicon glyphicon-cloud"></span> 版本更新
+					</a>
+				</li>
+				<li>
+					<a href="report">
+						<span class="glyphicon glyphicon-cloud"></span> 帮助中心
+					</a>
+				</li>
+				<li>
+					<a href="report">
+						<span class="glyphicon glyphicon-cloud"></span> 反馈
 					</a>
 				</li>
 				<li>

@@ -11,7 +11,7 @@
 			    border:1px solid #ededed;
 			    border-top: 2px solid #ededed;
 			    border-right: 0px none;
-			    background: #7a81f4;
+			    background: lightslategray;
 			    color:#fff;
 			    border-radius: 0px;
 			    margin-right: 0px;
@@ -97,7 +97,8 @@
 			.s-section {
 				position: relative;
 				float: left;
-				width: 304px;
+				min-width: 304px;
+				max-width: 404px;
 				margin: 10px 10px 16px 0px;
 				border-radius: 3px !important;
    				border-color: #d1d5da !important; 

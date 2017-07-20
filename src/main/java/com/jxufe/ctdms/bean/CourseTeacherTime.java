@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jxufe.ctdms.enums.DocState;
 
 /**
  * 课程  - 班次 - 教师  - 上课时间地点
@@ -31,6 +32,9 @@ public class CourseTeacherTime {
 	
 	@OneToOne(cascade=CascadeType.REFRESH)
 	private Course course;
+	
+	@Column(nullable = false)
+	private int state = DocState.NOT_SUBMIT.getStateId();  ;  // 每个班次的教学进度表的状态 
 	
 	@Column(length=10,nullable=false)
 	private String shift;
@@ -73,6 +77,15 @@ public class CourseTeacherTime {
 	public void setShift(String shift) {
 		this.shift = shift;
 	}
+	
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
 	@JsonIgnore
 	public long getId() {
 		return id;

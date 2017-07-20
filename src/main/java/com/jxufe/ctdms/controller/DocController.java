@@ -2,9 +2,11 @@ package com.jxufe.ctdms.controller;
  
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jxufe.ctdms.service.DocService;
 import com.jxufe.ctdms.utils.Zip;
@@ -14,10 +16,14 @@ public class DocController {
 	@Autowired
 	DocService docService;
 	/**
-	 * 删除文档
+	 * 获得上传文档页面
 	 */
 	@RequestMapping(value = "{userId}/submit", method = RequestMethod.GET)
-	public String submit(@PathVariable("userId")long userId) { 
+	public String submit(@PathVariable("userId")long userId,
+			@RequestParam(value="tab",defaultValue="teach") String tab,
+			Model model) { 
+		model.addAttribute("subdoc", docService.getWaitSubDocByTab(tab,userId));
+		model.addAttribute("tab", tab);
 		return "submitdoc";
 	}
 	/**

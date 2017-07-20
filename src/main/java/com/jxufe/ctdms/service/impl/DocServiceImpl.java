@@ -1,6 +1,7 @@
 package com.jxufe.ctdms.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.dao.CourseDao;
 import com.jxufe.ctdms.dao.CourseTeacherTimeDao;
 import com.jxufe.ctdms.dao.UserDao;
+import com.jxufe.ctdms.dto.DocDto;
+import com.jxufe.ctdms.reflect.SubmitTab;
 import com.jxufe.ctdms.service.DocService;
 import com.jxufe.ctdms.service.UserService;
 import com.jxufe.ctdms.utils.ExcelBean;
@@ -28,6 +31,28 @@ public class DocServiceImpl implements DocService {
 	UserDao userDao;
 	@Autowired
 	CourseTeacherTimeDao courseTeacherTimeDao;
+	
+	@Override
+	public List<DocDto> getWaitSubDocByTab(String tab,long userId){
+		try {
+			Class<?> c =Class.forName("com.jxufe.ctdms.reflect.SubmitTab"+captureName(tab));
+			SubmitTab submitTab = (SubmitTab) c.newInstance();
+			return submitTab.getDocDtos(courseTeacherTimeDao,userDao.findOne(userId));
+	    } catch (ClassNotFoundException e) { 
+	    	return Collections.emptyList();
+		} catch (InstantiationException e) { 
+			e.printStackTrace();
+		} catch (IllegalAccessException e) { 
+			e.printStackTrace();
+		}  
+		return Collections.emptyList();
+	}
+	//首字母大写
+    private static String captureName(String name) {
+        char[] cs=name.toCharArray();
+        cs[0]-=32;
+        return String.valueOf(cs); 
+    }
 	@Override
 	public void parseExcel() { 
 		List<ExcelBean> ebs = ExcelParse.parse("E:\\QQ\\QQmessage\\1059654342\\FileRecv\\软通学院本科162学期课表_撤班后.xls");

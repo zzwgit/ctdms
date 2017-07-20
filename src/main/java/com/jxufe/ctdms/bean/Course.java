@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jxufe.ctdms.enums.DocState;
 
 /**
  * @author 叶志伟 作者 E-mail: 1059654342@qq.com date 创建时间：2017年4月17日 下午10:31:40
@@ -23,7 +24,8 @@ public class Course {
 	@Column(name = "id")
 	private long id;
 
-	
+	@Column(nullable = false)
+	private int state = DocState.NOT_SUBMIT.getStateId();  // 教学大纲的状态 
 	@ManyToOne
 	@JoinColumn(name = "term_id")
 	private Term term; // 学期
@@ -63,6 +65,15 @@ public class Course {
 			return false;
 		return true;
 	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
 	public long getId() {
 		return id;
 	}

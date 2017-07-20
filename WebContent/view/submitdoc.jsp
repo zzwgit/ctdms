@@ -25,6 +25,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		width:100px;
 		float:right;
 	}
+	#top-progress-bar{z-index:2;
+	}
+	.green{
+		background-color: #7a81f4;
+	}
+	.line{
+		position: absolute;
+    	top: 0px;
+    	left: 0px;
+    	right: 0px; 
+    	height: 3px;
+    	width: 50%;
+    	transition: width 0.2s, opacity 0.6s;
+    	opacity: 1; 
+	}
+	.btn-primary{
+		background-color: white;
+		color:black;
+		font-weight: bold;
+	}
 	</style>
 </head>
 <body> 
@@ -49,20 +69,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</ul>
 						<div class="tab-content tabs">
 							<div role="tabpanel" class="tab-pane fade in active" id="panel">
-							 
+							 	<c:forEach var="s" items="${subdoc }">  
 									<section class="s-section">
-										<div class="sign-bg sign-bg-fail">未提交</div>
-										<h4>软件测试</h4> 
-										<p>代码:0ASDAS</p>
-										<p>班次:B04</p>
-										<p>开始时间：2017-04-28 23:00:00</p>
-										<p>结束时间：2017-04-28 23:00:00</p>
-										 
+										<div class="line green"></div>
+										
+										<div class="sign-bg sign-bg-fail">${s.state }</div>
+										<h4>${s.name }</h4> 
+										<c:forEach var="i" items="${s.docInfos }">  
+											<p>${i }</p> 
+										</c:forEach> 
 											<div class="s-content-bottom">
 											<span class="repo-language-color pinned-repo-meta" style="background-color:#b07219;">
 											</span>
 												<span class="doc-type">
-												 	<div class="fileicon doc-small"></div> 
+												 	<div class="fileicon ${s.type }-small"></div> 
 												</span>  
 													<form class="uploadForm" action=""  enctype="multipart/form-data">	
 														<a class="btn btn-primary btn-large btn-block file uploadBtn" href="#">
@@ -74,7 +94,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										 
 									
 									</section>  
-							 
+							 </c:forEach>
 								<div class="clear"></div>
 							
 							</div>

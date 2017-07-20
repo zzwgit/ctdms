@@ -32,9 +32,14 @@ public class User {
 	private String state = State.ACTIVE.getState();
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "APP_USER_USER_PROFILE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
+	@JoinTable(name = "USER_USER_PROFILE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
 	private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
 
+//	@ManyToMany(fetch = FetchType.EAGER)
+//	@JoinTable(name = "USER_COURSE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "COURSE_ID") })
+//	private List<Course> courses = new ArrayList<>();
+
+	
 	@Override
 	public String toString() {
 		return userId + "-" + userName + "-" + passWord;
