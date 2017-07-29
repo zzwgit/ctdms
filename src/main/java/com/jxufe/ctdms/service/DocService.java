@@ -20,4 +20,5 @@ public interface DocService {
 	
 	public void review(long userId ,long cid , String tab ,int isPass);
 	public void saveDoc(long userId , UploadRecord doc ) throws IOException;
+	public String getFilePath(long docId);
 }
