@@ -8,6 +8,11 @@ package com.jxufe.ctdms.bean;
 public enum UserProfileType {
 	USER(3,"USER"),
 	TEACHER(1,"TEACHER"), 
+	SECRETARY(6,"SECRETARY"),	//秘书
+	DIRECTOR(11,"DIRECTOR"),	//系主任
+	DEAN(16,"DEAN"),			//教学院长 
+	
+	
 	ADMIN(999,"ADMIN");
 	
 	String userProfileType;

@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -22,10 +20,10 @@ public class Notices {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-
-	@ManyToOne()
-	@JoinColumn(name = "type_id")
-	private NoticesType noticesType = new NoticesType();
+/*
+	@ManyToOne(cascade=CascadeType.REFRESH)
+	@JoinColumn(name = "type_id",nullable=false)
+	private NoticesType noticesType = new NoticesType();*/
 
 	@Column(nullable = true)
 	private long userId; // 针对某个人的消息 noticestype.rank == 1 生效
@@ -44,7 +42,7 @@ public class Notices {
 	@Override
 	public String toString() {
 		return title + "-" + message + "-" + time + "-" + level + "-" + author
-				+ "-" + noticesType;
+				+ "-" ;
 	}
 
 	public long getUserId() {
@@ -78,15 +76,7 @@ public class Notices {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public NoticesType getNoticesType() {
-		return noticesType;
-	}
-
-	public void setNoticesType(NoticesType noticesType) {
-		this.noticesType = noticesType;
-	}
-
+ 
 	public String getMessage() {
 		return message;
 	}

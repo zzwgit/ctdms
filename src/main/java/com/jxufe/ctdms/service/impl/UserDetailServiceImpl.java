@@ -23,9 +23,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String userName) {
 		User user = userDao.findByUserName(userName);
-		System.out.println(userName);
-		if(user==null){
-			System.out.println(userName+"：User not found");
+		System.out.println("["+userName+"] 尝试登陆");
+		if(user==null){ 
 			throw new UsernameNotFoundException("Username not found");
 		}
 			return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassWord(), 
@@ -36,9 +35,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		
 		for(UserProfile userProfile : user.getUserProfiles()){
-			authorities.add(new SimpleGrantedAuthority("ROLE_"+userProfile.getType()));
+			authorities.add(new SimpleGrantedAuthority("ROLE_"+userProfile.getType())); 
 		}
-		System.out.println("authorities :"+authorities);
+		//System.out.println("authorities :"+authorities);
 		return authorities;
 	}
 

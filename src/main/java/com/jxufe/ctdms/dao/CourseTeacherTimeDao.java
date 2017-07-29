@@ -12,4 +12,7 @@ import com.jxufe.ctdms.bean.User;
 public interface CourseTeacherTimeDao extends JpaRepository<CourseTeacherTime, Serializable> {
 
 	List<CourseTeacherTime> findByUser(User user);
+	
+	
+	List<CourseTeacherTime> findByState(int state);
 }

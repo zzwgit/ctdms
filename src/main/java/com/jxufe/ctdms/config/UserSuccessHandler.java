@@ -17,6 +17,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.service.UserService;
 
 @Component
@@ -32,7 +33,8 @@ public class UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 		} else {
 			userName = principal.toString();
 		}
-		return userService.findByUserName(userName).getUserId();
+		User user = userService.findByUserName(userName); 
+		return user.getUserId();
 	}
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 	@Override
@@ -50,7 +52,6 @@ public class UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 	 
     protected String determineTargetUrl(Authentication authentication) {
     	String url="";
-    	
         Collection<? extends GrantedAuthority> authorities =  authentication.getAuthorities();
         
 		List<String> roles = new ArrayList<String>();
@@ -58,7 +59,7 @@ public class UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 		for (GrantedAuthority a : authorities) {
 			roles.add(a.getAuthority());
 		}
-
+		
 	   if (isUser(roles) || isAdmin(roles)) {
 			url = "/notices";
 		} else {

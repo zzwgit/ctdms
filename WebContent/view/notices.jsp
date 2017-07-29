@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</ul>
 		</div>
 		<c:forEach var="nt" items="${noticesdto }">  
-			<div class="msg-container" id="news">
+			<div class="msg-container fadeInUp animated" id="news">
 				<dl class="msgtype"> ${nt.typeName }</dl> 
 				<c:if test="${empty nt.notices }">
 				    <dl>

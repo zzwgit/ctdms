@@ -8,7 +8,7 @@ public class Zip {
 	
 	public Zip() { 
 	}
-	public void compression(){
+	public void compression(byte[] bytes){
 		
 	}
 	public void decompression(){

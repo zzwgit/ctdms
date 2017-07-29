@@ -1,5 +1,6 @@
 package com.jxufe.ctdms.bean;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,6 +32,9 @@ public class Course {
 	@JoinColumn(name = "term_id")
 	private Term term; // 学期
  
+	@OneToOne(cascade=CascadeType.REFRESH)
+	private UploadRecord uploadRecord;
+	
 	@Column(length = 25, nullable = false)
 	private String courseName;
 	@Column(length = 10, nullable = false, unique = true)
@@ -64,6 +69,14 @@ public class Course {
 		} else if (!courseCode.equals(other.courseCode))
 			return false;
 		return true;
+	}
+
+	public UploadRecord getUploadRecord() {
+		return uploadRecord;
+	}
+
+	public void setUploadRecord(UploadRecord uploadRecord) {
+		this.uploadRecord = uploadRecord;
 	}
 
 	public int getState() {

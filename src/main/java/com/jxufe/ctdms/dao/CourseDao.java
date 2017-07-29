@@ -11,4 +11,6 @@ import com.jxufe.ctdms.bean.Term;
 public interface CourseDao extends JpaRepository<Course, Serializable>{
 
 	List<Course> findByTerm(Term term);
+	
+	List<Course> findByState(int state);
 }

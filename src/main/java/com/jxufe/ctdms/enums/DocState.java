@@ -1,18 +1,21 @@
 package com.jxufe.ctdms.enums;
  
 public enum DocState {
-	NOT_SUBMIT(0,"未提交"),
-	WAIT_REVIEW(4,"等待审核"),
-	PASS_1(7,"通过第一次审核"),
+	NOT_SUBMIT(0,"未提交","no-submit"),
+	WAIT_REVIEW(4,"等审核","wait"),
+	PASS_1(7,"过初核","pass-1"),
 	//PASS_2(11,"通过第二次审核"),
-	PASS_FINAL(19,"通过终核");
+	PASS_FINAL(19,"过终核","pass-2"),
+	FAIL(-2,"失败","fail");
 	
 	private int stateId;
 	private String stateMsg; 
+	private String plusMsg; 
 	
-	DocState(int id,String msg){
+	DocState(int id,String msg,String plusMsg){
 		this.stateId = id;
 		this.stateMsg = msg ;
+		this.plusMsg=plusMsg;
 	}
 	
 	
@@ -23,6 +26,11 @@ public enum DocState {
 		}
 		
 		return null;
+	}
+
+
+	public String getPlusMsg() {
+		return plusMsg;
 	}
 
 

@@ -36,6 +36,9 @@ public class CourseTeacherTime {
 	@Column(nullable = false)
 	private int state = DocState.NOT_SUBMIT.getStateId();  ;  // 每个班次的教学进度表的状态 
 	
+	@OneToOne(cascade=CascadeType.REFRESH)
+	private UploadRecord uploadRecord;
+	
 	@Column(length=10,nullable=false)
 	private String shift;
 	 
@@ -60,6 +63,14 @@ public class CourseTeacherTime {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public UploadRecord getUploadRecord() {
+		return uploadRecord;
+	}
+
+	public void setUploadRecord(UploadRecord uploadRecord) {
+		this.uploadRecord = uploadRecord;
 	}
 
 	public List<CourseTime> getCourseTimes() {

@@ -14,8 +14,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</head>
 	
 	<body>
-	<div class="module-frame"  id="iframe"> 
-		<table id="table" border="1" width="100%" style="border-collapse:collapse">
+	<div class="container module-frame"  id="iframe">  
+			<div class="frame-title">
+			<h5>我的预期课程表</h5>
+			</div>
+		<table id="table" class="fadeInUp animated" border="1" width="100%" style="border-collapse:collapse">
 			<tbody> 
 				<tr>
 					<td class="cell1"></td>

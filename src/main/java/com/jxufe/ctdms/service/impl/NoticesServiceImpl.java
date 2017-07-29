@@ -71,13 +71,14 @@ public class NoticesServiceImpl implements NoticesService {
 		
 		notices.setAuthor(user.getRealName());	 
 		NoticesType nt = noticesTypeDao.findByTypeName("最新动态");
-		
-		notices.setNoticesType(nt);
-		System.out.println(nt);
-		noticesDao.save(notices);
+		//
+		nt.getNotices().add(notices);
+
+		noticesTypeDao.save(nt);
 	}
 
 	private int checkNoticesType(User user , int noticesTypeId){ 
+		//TODO
 		Set<UserProfile>ups = user.getUserProfiles();
 		 for (UserProfile userProfile : ups) {
 			 if(userProfile.getType().equals(UserProfileType.ADMIN.getUserProfileType())){

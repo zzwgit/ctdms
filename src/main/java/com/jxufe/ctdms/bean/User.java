@@ -1,8 +1,10 @@
 package com.jxufe.ctdms.bean;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -35,11 +38,15 @@ public class User {
 	@JoinTable(name = "USER_USER_PROFILE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
 	private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
 
-//	@ManyToMany(fetch = FetchType.EAGER)
-//	@JoinTable(name = "USER_COURSE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "COURSE_ID") })
-//	private List<Course> courses = new ArrayList<>();
-
 	
+	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,mappedBy="user")
+	List<UploadRecord> uploadRecords;
+	
+	// @ManyToMany(fetch = FetchType.EAGER)
+	// @JoinTable(name = "USER_COURSE", joinColumns = { @JoinColumn(name =
+	// "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "COURSE_ID") })
+	// private List<Course> courses = new ArrayList<>();
+
 	@Override
 	public String toString() {
 		return userId + "-" + userName + "-" + passWord;
@@ -98,14 +105,14 @@ public class User {
 		if (this == obj)
 			return true;
 		if (obj == null)
-			return false; 
-		if (obj instanceof String){
-			if(this.realName.equals((String)obj)){
+			return false;
+		if (obj instanceof String) {
+			if (this.realName.equals((String) obj)) {
 				return true;
 			}
 			return false;
 		}
-		User other = (User) obj; 
+		User other = (User) obj;
 		if (userName == null) {
 			if (other.userName != null)
 				return false;

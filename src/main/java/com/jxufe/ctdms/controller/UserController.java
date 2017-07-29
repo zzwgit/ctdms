@@ -97,7 +97,7 @@ public class UserController {
 			System.out.println("Authentication failed: " + e.getMessage());
 			return new ModelAndView(new RedirectView("login"));
 		} 
-		return new ModelAndView(new RedirectView("main"));
+		return new ModelAndView(new RedirectView("login"));
 	}
 	
 	

@@ -2,7 +2,6 @@ package com.jxufe.ctdms.service;
 
 import java.util.List;
 
-import com.jxufe.ctdms.bean.Notices;
 import com.jxufe.ctdms.dto.NoticesDto;
 
 

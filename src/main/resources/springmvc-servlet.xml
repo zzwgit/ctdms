@@ -16,5 +16,8 @@
 		<value>.jsp</value>
 	  </property>
 	</bean>
-
+  	<bean id="multipartResolver"   class="com.jxufe.ctdms.controller.CustomMultipartResolver">  
+	    <property name="defaultEncoding" value="UTF-8" />  
+	    <property name="maxUploadSize" value="2147483648" />  
+	</bean> 
 </beans>

@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jxufe.ctdms.dto.AjaxResult;
 import com.jxufe.ctdms.dto.NoticesDto;
 import com.jxufe.ctdms.service.NoticesService;
 
@@ -33,6 +31,8 @@ public class NoticesController {
 		model.addAttribute("noticesdto", dtos); 
 		return "notices";
 	} 
+	
+ 
 	@RequestMapping(value="{userId}/notices", method = RequestMethod.POST) 
 	public String addNotices(@PathVariable("userId") long userId,
 			@RequestParam(value = "level", required = false,defaultValue="0") int level,
@@ -47,6 +47,7 @@ public class NoticesController {
 				model.addAttribute("fail", "1");
 			}
 			model.addAttribute("userId", userId);
-			return "delivernotice";
+			return "redirect:notices";
+			//delivernotice;
 	 } 
 }

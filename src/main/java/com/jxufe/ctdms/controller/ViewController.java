@@ -23,7 +23,7 @@ import com.jxufe.ctdms.service.UserService;
 public class ViewController {
 	@Autowired
 	UserService userService;
-	private long getUserId(){
+	protected long getUserId(){
 		String userName = null;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -34,8 +34,8 @@ public class ViewController {
 		}
 		return userService.findByUserName(userName).getUserId();
 	} 
-	
-	
+ 
+ 
 	@RequestMapping(value = "{userId}/course", method = RequestMethod.GET)
 	public String mycourse() { 
 		return "mycourse";

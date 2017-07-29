@@ -22,7 +22,7 @@ public class NoticesType {
 	@Column(name = "type_id")
 	private int typeId;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "noticesType")
+	@OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
 	private List<Notices> notices = new ArrayList<>();
 
 	@Column(nullable = false)

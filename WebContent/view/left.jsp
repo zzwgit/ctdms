@@ -66,7 +66,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="javascript:iframeChang('');">
+					<a href="review">
 						<span class="glyphicon glyphicon-folder-close"></span> 待审核文档
 					</a>
 				</li>
