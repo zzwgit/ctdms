@@ -58,10 +58,8 @@
 					</a>
 				</li>
 				<li>
-					<a href="submit">
-
-						<span class="badge pull-right">22</span>
-
+					<a href="submit"> 
+						<span class="badge pull-right">22</span> 
 						<span class="glyphicon glyphicon-tasks"></span> 待提交文档
 					</a>
 				</li>
@@ -69,19 +67,19 @@
 					<a href="review">
 						<span class="glyphicon glyphicon-folder-close"></span> 待审核文档
 					</a>
-				</li>
+				</li> 
 				<li>
-					<a href="javascript:iframeChang('textBookList');">
-						<span class="glyphicon glyphicon-book"></span> 教材申报
-					</a>
-				</li>
-				<li>
-					<a href="javascript:iframeChang('classComplete');">
+					<a href="status">
 						<span class="glyphicon glyphicon-eye-open"></span> 提交情况
 					</a>
 				</li>
 				<li>
-					<a href="javascript:iframeChang('limitDate');">
+					<a href="declaration">
+						<span class="glyphicon glyphicon-book"></span> 教材申报
+					</a>
+				</li>
+				<li>
+					<a href="setting">
 						<span class="glyphicon glyphicon-cog"></span> 设置
 					</a>
 				</li>
@@ -91,43 +89,43 @@
 					</a>
 				</li>
 				<li>
-					<a href="javascript:iframeChang('userManage');">
+					<a href="users">
 						<span class="glyphicon glyphicon-wrench"></span> 用户信息
 					</a>
 				</li>
 
 				<li>
-					<a href="javascript:iframeChang('findDoc');">
+					<a href="statistics">
 						<span class="glyphicon glyphicon-signal"></span> 统计信息
 					</a>
 				</li>
 				<li>
-					<a href="javascript:iframeChang('allDoc-frame');">
+					<a href="docs">
 						<span class="glyphicon glyphicon-cloud"></span> 我的文档
 					</a>
 				</li>
 				<li>
-					<a href="javascript:iframeChang('allDoc-frame');">
+					<a href="info">
 						<span class="glyphicon glyphicon-cloud"></span> 个人信息
 					</a>
 				</li>
 				<li>
-					<a href="javascript:iframeChang('allDoc-frame');">
+					<a href="update">
 						<span class="glyphicon glyphicon-cloud"></span> 版本更新
 					</a>
 				</li>
 				<li>
-					<a href="report">
+					<a href="help">
 						<span class="glyphicon glyphicon-cloud"></span> 帮助中心
 					</a>
 				</li>
 				<li>
-					<a href="report">
+					<a href="feedback">
 						<span class="glyphicon glyphicon-cloud"></span> 反馈
 					</a>
 				</li>
 				<li>
-					<a href="javascript:iframeChang('allDoc-frame');">
+					<a href="logout">
 						<span class="glyphicon glyphicon-cloud"></span> 退出
 					</a>
 				</li>

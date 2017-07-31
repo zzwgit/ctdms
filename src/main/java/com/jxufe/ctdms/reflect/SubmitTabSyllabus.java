@@ -1,6 +1,8 @@
 package com.jxufe.ctdms.reflect;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.jxufe.ctdms.bean.Course;
@@ -8,7 +10,10 @@ import com.jxufe.ctdms.bean.CourseTeacherTime;
 import com.jxufe.ctdms.bean.UploadRecord;
 import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.dao.CourseTeacherTimeDao;
+import com.jxufe.ctdms.dao.UserDao;
+import com.jxufe.ctdms.dto.CompletionDegreeDto;
 import com.jxufe.ctdms.dto.DocDto;
+import com.jxufe.ctdms.dto.Schedule;
 import com.jxufe.ctdms.enums.DocState;
 
 public class SubmitTabSyllabus extends SubmitTab {
@@ -21,15 +26,15 @@ public class SubmitTabSyllabus extends SubmitTab {
 				.findByUser(user));
 		for (CourseTeacherTime ctt : ctts) {
 			List<String> strs = new ArrayList<>();
-			strs.add("代码:" + ctt.getCourse().getCourseCode());
-			strs.add("开始时间:" + time);
-			strs.add("结束时间:" + time);
-			DocDto dd = new DocDto(strs, ctt.getState(), ctt.getCourse()
-					.getCourseName());
+			Course c = ctt.getCourse();
+			strs.add("代码: " + c.getCourseCode());
+			strs.add("开始时间: " + time);
+			strs.add("结束时间: " + time);
+			DocDto dd = new DocDto(strs, c.getState(), c.getCourseName());
 			dd.setType("doc");
-			dd.setId(ctt.getCourse().getId());
+			dd.setId(c.getId());
 			docDtos.add(dd);
-		}
+		} 
 		return docDtos;
 	}
 
@@ -76,15 +81,20 @@ public class SubmitTabSyllabus extends SubmitTab {
 		for (Course c : list) {
 			List<String> strs = new ArrayList<>();
 			UploadRecord ulr = c.getUploadRecord();
-			strs.add(ulr.getUser().getRealName());
-			strs.add(ulr.getDate());
+			strs.add(ulr.getUser().getRealName()); 
 			DocDto dd = new DocDto();
 			dd.setName(c.getCourseName());
 			dd.setId(c.getId());
+			dd.setDate(ulr.getDate());
 			dd.setDocInfos(strs);
 			dd.setDocId(ulr.getId());
 			docDtos.add(dd);
 		}
+		Collections.sort(docDtos, new Comparator<DocDto>() {
+            public int compare(DocDto o1, DocDto o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+		});
 		return docDtos;
 	}
 
@@ -100,6 +110,42 @@ public class SubmitTabSyllabus extends SubmitTab {
 				course.setState(DocState.PASS_FINAL.getStateId());
 			}
 		}
+		courseDao.save(course);
+	}
+
+	@Override
+	public List<CompletionDegreeDto> completes(Object userDao) {
+		List<CompletionDegreeDto> cdds = new ArrayList<>(); 
+		List<User> users = ((UserDao)userDao).findAll();
+		for (User u : users) {
+			List<CourseTeacherTime> ctts = courseTeacherTimeDao.findByUser(u);
+			CompletionDegreeDto cdd = new CompletionDegreeDto();
+			List<Schedule> schedules = new ArrayList<>();
+			Course c = null ;
+			for (CourseTeacherTime ctt : ctts) {
+				Schedule s = new Schedule();
+				s.setShift(ctt.getShift());
+				s.setTeacherName(ctt.getCourse().getCourseName());
+				s.setState(ctt.getState()); 
+				schedules.add(s);
+				c = ctt.getCourse();
+			}  
+			if(c==null){
+				continue;
+			}
+			cdd.setCode(c.getCourseCode());
+			cdd.setName(u.getRealName());
+			cdd.setState(c.getState());
+			cdd.setSchedules(schedules);
+			cdds.add(cdd); 
+		} 
+		return cdds;
+	}
+
+	@Override
+	public void deleteDoc(long cid) {
+		course = courseDao.findOne(cid);  
+		course.setState(DocState.NOT_SUBMIT.getStateId());
 		courseDao.save(course);
 	}
 }

@@ -1,5 +1,6 @@
 package com.jxufe.ctdms.service.impl;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Service;
 import com.jxufe.ctdms.bean.CourseTeacherTime;
 import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.bean.UserProfile;
-import com.jxufe.ctdms.bean.UserProfileType;
 import com.jxufe.ctdms.dao.CourseTeacherTimeDao;
 import com.jxufe.ctdms.dao.UserDao;
-import com.jxufe.ctdms.service.UserService; 
+import com.jxufe.ctdms.enums.UserProfileType;
+import com.jxufe.ctdms.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -64,10 +65,9 @@ public class UserServiceImpl implements UserService {
 		return userDao.findAll();
 	}
 	@Override
-	public List<CourseTeacherTime> getCTT(long userId) {
+	public List<CourseTeacherTime> getCTT(long userId) { 
 		User user = userDao.findByUserId(userId);
-		List<CourseTeacherTime> ctts = courseTeacherTimeDao.findByUser(user); 
-		return ctts; 
+		return courseTeacherTimeDao.findByUser(user); 
 	}
 
 }

@@ -5,10 +5,11 @@
 <head>
 <title>学院教学文档管理系统</title>
 <link rel="stylesheet" href="css/login.css" />
+<link rel="stylesheet" href="css/ctdms.css" />
 </head>
 <body>
 	<div class="wallpaper">
-		<div class="signup-form ">
+		<div class="signup-form fadeInUp animated">
 			<div class="signup-form__logo-box">
 				<div class="signup-form__logo"></div>
 				<div class="signup-form__catchphrase">让文档提交变得更有效率</div>
@@ -30,7 +31,7 @@
 								</div>
 							</div>
 
-							<ul class="error-msg-list">
+							<ul class="error-msg-list fadeInUp animated">
 								<c:if test="${!empty error }">
 									<li class="error-msg-list__item">${error }</li>
 								</c:if>

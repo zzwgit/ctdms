@@ -34,17 +34,19 @@ public class ViewController {
 		}
 		return userService.findByUserName(userName).getUserId();
 	} 
- 
+	@RequestMapping(value = "{userId}/setting", method = RequestMethod.GET)
+	public String setting() { 
+		return "setting";
+	}
  
 	@RequestMapping(value = "{userId}/course", method = RequestMethod.GET)
 	public String mycourse() { 
 		return "mycourse";
 	}
-	
+
 	@RequestMapping(value = "{userId}/mycourse", method = RequestMethod.GET)
 	@ResponseBody
 	public List<CourseTeacherTime> mycoursedata(@PathVariable("userId")long userId){ 
-		 List<CourseTeacherTime>  ctts = userService.getCTT(userId);
-		 return ctts; 
+		return userService.getCTT(userId);  
 	}
 }

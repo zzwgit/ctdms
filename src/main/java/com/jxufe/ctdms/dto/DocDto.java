@@ -14,6 +14,7 @@ public class DocDto {
 	List<String> docInfos ;
 	
 	long id;
+	String date;
 	
 	int state ; 
 	String stateMsg;
@@ -52,6 +53,12 @@ public class DocDto {
 		this.state = state; 
 	}
 
+	public String getDate() {
+	return date;
+}
+public void setDate(String date) {
+	this.date = date;
+}
 	public long getId() {
 		return id;
 	}

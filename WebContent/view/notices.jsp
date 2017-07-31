@@ -13,11 +13,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 
 		<jsp:include   page="left.jsp" flush="true"/> 
 		 <link rel="stylesheet" href="<%=basePath %>css/ctdms_notices.css" />
-	</head>
+	 	</head>
 
 	<body>
 		 
-		<div class="module-frame"  id="iframe"> 
+		<div class="module-frame" id="iframe"> 
 			<div class="newsticker">
 				<ul class="newsticker-list">
 				<li class="newsticker-item">
@@ -31,6 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</li>
 			</ul>
 		</div>
+		
 		<c:forEach var="nt" items="${noticesdto }">  
 			<div class="msg-container fadeInUp animated" id="news">
 				<dl class="msgtype"> ${nt.typeName }</dl> 
@@ -58,7 +59,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</c:if> 
 			</div>
 		</c:forEach>
-		 
+	 
 		</div>
 	</body>
 
@@ -71,7 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$('dl').on('click', 'dt', function() {
 				$(this).next().slideToggle(200);
 			});
-		})();
+		})(); 	
 	</script>
 
 </html>

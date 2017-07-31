@@ -63,6 +63,9 @@
 		<div class="container module-frame" id="iframe">
 			<div class="frame-title">
 				<h5>待提交的文档</h5>
+				<div class="nowrap pull-right" style="margin-top:10px">
+				    <div class="ctdms-btn-small btn-danger"><i class=""></i> 显示错误点我</div> 
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-8">
@@ -98,7 +101,9 @@
 												class="doc-type">
 												<div class="fileicon ${s.type }-small" ></div>
 											</span>
-											<form class="uploadForm"  action="<%=basePath %>upload" method="post" enctype="multipart/form-data">
+											<c:choose> 
+											 <c:when test="${s.state == 0}">
+											<form class="uploadForm"   action="<%=basePath %>upload" method="post" enctype="multipart/form-data">
 											
 												<input type="hidden" name="id"  value="${s.id }" /> 
 												<input type="hidden" name="userId"  value="${userId }" /> 
@@ -109,6 +114,14 @@
 												<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />  
 												</div>  
 											</form>
+											</c:when> 
+											<c:otherwise>   
+												<div class="ctdms-btn" onclick="_delete(${s.id})"> 
+												删 除
+												</div>
+											</c:otherwise>
+											  
+											</c:choose>
 										</div> 
 									</section>
 									
@@ -145,19 +158,18 @@
 			type: 'get',
 			success : function(data) {
 				if (data == 'error' || data.percent == "100") {
-					window.clearInterval(oTimer); //清除定时器	 
-					
+					window.clearInterval(oTimer); //清除定时器
+					window.location.reload(); 	  
 				}else{
 					topbar.setProgress(data.percent);
 				}
 			},
-			error : function(err) {
+			error : function(err) { 
 				window.clearInterval(oTimer); //清除定时器	 
 			}
 		});
 	}
-	function upload_ps() {
-		if(!oTimer)
+	function upload_ps() { 
 			oTimer = setInterval("getProgress()", 500);
 	}
 
@@ -191,5 +203,23 @@
 		bindSubmit();
 		change();
 	};
+	
+	function _delete(cid){
+		$.ajax({
+			url : "doc",
+			type:'post',
+			data : {
+				${_csrf.parameterName}:"${_csrf.token}",
+				_method:'delete',
+				id:cid,
+				tab : getUrlFrame('tab')
+			},
+			success : function(data) {
+				window.location.reload(); 
+			},
+			error : function(err) {
+			}
+		}); 
+	}
 </script>
 </html>

@@ -40,8 +40,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	<body>
 	 
-		<div class="module-frame"  id="iframe"> 
-		<form action="notices" method="post">
+		<div class="container module-frame"  id="iframe"> 
+			<div class="frame-title">
+				<h5>发布通知</h5> 
+			</div>
+			
+		<form action="notices" class="fadeInUp animated" method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<input id="title" type="text" name="title" placeholder="请输入标题" autocapitalize="off" autocomplete="off" />
 			<div id="editor" class="text">

@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -35,13 +35,16 @@ td,th {
 }
 </style>
 </head>
-<body>
-	<div id="top-progress-bar"></div>
+<body> 
 	<div class="">
 
 		<div class="container module-frame" id="iframe">
 			<div class="frame-title">
 				<h5>待审核的文档</h5>
+				<div class="nowrap pull-right" style="margin-top:10px">
+				    <div class="ctdms-btn-small"><i class="glyphicon glyphicon-ok"></i> 全部通过</div>
+				    <div class="ctdms-btn-small btn-danger"><i class="glyphicon glyphicon-remove"></i> 全部打回</div>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-8">
@@ -61,7 +64,7 @@ td,th {
 								<table class="table table-hover">
 									<thead>
 										<tr>
-											<th><select class="select-primary">
+											<th style="text-align: left;"><select class="select-primary">
 													<option value="all" selected>全部</option>
 													<option value="unsub">未提交</option>
 													<option value="wait">待审核</option>
@@ -80,18 +83,19 @@ td,th {
 									<tbody>
 										<c:forEach var="s" items="${docs }">
 											<tr>
-												<td>待审核</td>
+												<td style="text-align: left;">待审核</td>
 												<td><a class="cin" href="javascript:openPDF('')">${s.name }</a>
 												</td>
-												<c:forEach var="i" items="${s.docInfos }">
-													<td>${i }</td>
+												<c:forEach var="i"  items="${s.docInfos }"> 
+													<td>${i }</td> 
 												</c:forEach>
+												<td class="re-data" data-timeago="${s.date }"></td> 
 												<td><a class="cback"
-													href="javascript:download(${s.docId })">下载</a> <span
+													href="download?docId=${s.docId }">下载</a> <span
 													class="text-explode">|</span> <a class="cpass"
-													href="javascript:review(${s.id },${tab },1)">通过</a> <span
+													href="javascript:review(${s.id },'${tab }',1)">通过</a> <span
 													class="text-explode">|</span> <a class="cback"
-													href="javascript:review(${s.id },${tab },0)">打回</a></td>
+													href="javascript:review(${s.id },'${tab }',0)">打回</a></td>
 											</tr>
 										</c:forEach>
 									</tbody>
@@ -108,38 +112,35 @@ td,th {
 </body>
 <script type="text/javascript" src="<%=basePath%>js/tab.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/timeago.js"></script>
+<script type="text/javascript" src="<%=basePath%>plugins/layer/layer.js" ></script>
 <script type="text/javascript">
 	window.onload = function() {
 		var tab = getUrlFrame('tab');
 		document.getElementById(tab).className = "active";
+		
+		timeago().render(document.querySelectorAll('.re-data'), 'zh_CN');
+		timeago().cancel();
 	};
-	function review(cid, tab, pass) {
-		$.post({
+	function review(cid, ctab, pass) {
+		$.ajax({
 			url : "review",
-			dataType : "json",
+			type:'post',
 			data : {
+				${_csrf.parameterName}:"${_csrf.token}",
 				id : cid,
-				tab : tab,
+				tab : ctab,
 				isPass : pass
 			},
 			success : function(data) {
+				layer.msg('审核成功', {icon: 1},function(){ 
+        			location.reload(true);   
+        		});
 			},
 			error : function(err) {
+				layer.msg('审核失败', {icon: 5});
 			}
 		});
-	}
-	function download(id) {
-		$.post({
-			url : "download",
-			dataType : "json",
-			data : {
-				docId : id
-			},
-			success : function(data) {
-			},
-			error : function(err) {
-			}
-		});
-	}
+	} 
 </script>
 </html>

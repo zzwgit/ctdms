@@ -20,7 +20,7 @@ import com.jxufe.ctdms.utils.Progress;
 @Controller 
 public class ProgressController{
 
-	@RequestMapping(value = "{userId}/progress", method = {RequestMethod.POST,RequestMethod.GET })
+	@RequestMapping(value = "{userId}/progress", headers = "Accept=application/json", method = {RequestMethod.POST,RequestMethod.GET })
 	@ResponseBody
 	public Progress initCreateInfo(HttpSession session,
 			@PathVariable("userId")long userId) {

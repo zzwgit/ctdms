@@ -36,11 +36,51 @@
 			    border-left: 2px solid #88B7E0;
 			}
 			.nowrap {
-			    white-space: nowrap !important;
+			    white-space: nowrap !important; 
 			}
 			.pull-right {
 			    float: right!important;
 			}
+			
+			.ctdms-btn-small{
+				    height: 30px;
+				    float:left;
+				    line-height: 29px;
+				    background-color: #3B8CFF;
+				    color:white;
+				    margin-left: 10px;
+				    padding: 0 10px;
+				    font-size: 14px;
+				    cursor:pointer;
+				    text-align: center;
+			}
+			.ctdms-btn{
+			    display: inline-block;
+			    padding: 5px 18px;
+			    font-size: 14px; 
+			    color: #fff;
+			    background: #e7989a;
+			    border-bottom-right-radius: 10px;
+			    text-transform: capitalize;
+			    transition: all 0.30s linear;
+			    cursor: pointer;
+    		}
+    		.btn-ban{
+    			 
+    		}
+    		
+    		.ctdms-btn:hover{
+			    background: #333;
+			    text-decoration: none;
+			}
+			.btn-danger{
+			    background-color: #FF5722;
+			}
+			.ctdms-btn-small i {
+			    font-size: 16px!important;
+			}
+			
+			
 			/**
 			* 动画
 			*/

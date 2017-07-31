@@ -7,11 +7,12 @@ import java.util.Set;
 import com.jxufe.ctdms.bean.UploadRecord;
 import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.bean.UserProfile;
-import com.jxufe.ctdms.bean.UserProfileType;
 import com.jxufe.ctdms.dao.CourseDao;
 import com.jxufe.ctdms.dao.CourseTeacherTimeDao;
+import com.jxufe.ctdms.dto.CompletionDegreeDto;
 import com.jxufe.ctdms.dto.DocDto;
 import com.jxufe.ctdms.enums.DocState;
+import com.jxufe.ctdms.enums.UserProfileType;
 
 public abstract class SubmitTab {
  
@@ -21,11 +22,15 @@ public abstract class SubmitTab {
 		docDtos = new ArrayList<>();
 	}
 	public abstract List<DocDto> getDocDtos(Object obj,User user);//前台显示用
-	
+
 	/**
 	 * 审核
 	 */
 	public abstract void review(long cid,int isPass,User user);//前台显示用
+	
+	public abstract void deleteDoc(long cid);
+	
+	public abstract List<CompletionDegreeDto> completes(Object userDao);//前台显示用
 	/**
 	 * 根据用户权限 显示相应的 Doc
 	 * @param user
@@ -65,4 +70,19 @@ public abstract class SubmitTab {
 		courseDao = d1;
 		courseTeacherTimeDao = d2;
 	} 
+	
+	
+	public static SubmitTab getInstanceByTab(String tab) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+		Class<?> c = Class.forName("com.jxufe.ctdms.reflect.SubmitTab"
+				+ captureName(tab)); 
+		return  (SubmitTab) c.newInstance();
+	}
+	
+
+	// 首字母大写
+	private static String captureName(String name) { 
+		char[] cs = name.toCharArray(); 
+		cs[0] -= 32;
+		return String.valueOf(cs);
+	}
 }

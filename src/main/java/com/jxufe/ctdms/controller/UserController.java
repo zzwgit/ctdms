@@ -15,13 +15,16 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.jxufe.ctdms.bean.User;
+import com.jxufe.ctdms.dao.UserDao;
 import com.jxufe.ctdms.service.UserService;
  
 
@@ -61,6 +64,30 @@ public class UserController {
 		return "redirect:/login?logout";
 	}
 	
+	@RequestMapping(value = "{userId}/users", method = RequestMethod.GET)
+	public String usersPage(@PathVariable("userId")long userId) { 
+		return "users";
+	}
+	
+	@RequestMapping(value = "{userId}/users", method = RequestMethod.PUT)
+	@ResponseBody
+	public String addUser(@PathVariable("userId")long userId) {
+		
+		return "users";
+	}
+	@RequestMapping(value = "{userId}/users", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateUser(@PathVariable("userId")long userId) {
+		
+		return "users";
+	}
+	
+	@RequestMapping(value = "/users", method = RequestMethod.DELETE)
+	@ResponseBody
+	public String deleteUser() {
+		
+		return "users";
+	}
 	
 	@Autowired
 	@Qualifier("org.springframework.security.authenticationManager")

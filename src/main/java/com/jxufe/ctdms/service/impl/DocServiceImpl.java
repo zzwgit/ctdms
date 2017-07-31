@@ -21,6 +21,7 @@ import com.jxufe.ctdms.dao.CourseTeacherTimeDao;
 import com.jxufe.ctdms.dao.DocTypeDao;
 import com.jxufe.ctdms.dao.UploadRecordDao;
 import com.jxufe.ctdms.dao.UserDao;
+import com.jxufe.ctdms.dto.CompletionDegreeDto;
 import com.jxufe.ctdms.dto.DocDto;
 import com.jxufe.ctdms.reflect.SubmitTab;
 import com.jxufe.ctdms.service.DocService;
@@ -49,16 +50,12 @@ public class DocServiceImpl implements DocService {
 	@Override
 	public List<DocDto> getWaitSubDocByTab(String tab, long userId) {
 		try {
-			Class<?> c = Class.forName("com.jxufe.ctdms.reflect.SubmitTab"
-					+ captureName(tab));
-			SubmitTab submitTab = (SubmitTab) c.newInstance();
+			SubmitTab submitTab = SubmitTab.getInstanceByTab(tab); 
 			return submitTab.getDocDtos(courseTeacherTimeDao,
 					userDao.findOne(userId));
 		} catch (ClassNotFoundException e) {
 			return Collections.emptyList();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (IllegalAccessException | InstantiationException e) {
 			e.printStackTrace();
 		}
 		return Collections.emptyList();
@@ -66,36 +63,21 @@ public class DocServiceImpl implements DocService {
 
 	@Override
 	public List<DocDto> getWaitReviewDocByTab(String tab, long userId) {
-		try {
-			Class<?> c = Class.forName("com.jxufe.ctdms.reflect.SubmitTab"
-					+ captureName(tab));
-			SubmitTab submitTab = (SubmitTab) c.newInstance();
+		try { 
+			SubmitTab submitTab = SubmitTab.getInstanceByTab(tab); 
 			submitTab.initDAO(courseDao, courseTeacherTimeDao);
 			return submitTab.getReviewDocDtos(userDao.findOne(userId));
 		} catch (ClassNotFoundException e) {
 			return Collections.emptyList();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (IllegalAccessException | InstantiationException e) {
 			e.printStackTrace();
 		}
 		return Collections.emptyList();
-	}
-
-	// 首字母大写
-	private static String captureName(String name) {
-		char[] cs = name.toCharArray();
-		cs[0] -= 32;
-		return String.valueOf(cs);
-	}
-
-	public void review(long userId, long cid, String tab, int isPass) {
-		Class<?> c;
+	} 
+	public void review(long userId, long cid, String tab, int isPass) { 
 		SubmitTab submitTab = null;
 		try {
-			c = Class.forName("com.jxufe.ctdms.reflect.SubmitTab"
-					+ captureName(tab));
-			submitTab = (SubmitTab) c.newInstance();
+			submitTab = SubmitTab.getInstanceByTab(tab); 
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException e) {
 			e.printStackTrace();
@@ -106,13 +88,10 @@ public class DocServiceImpl implements DocService {
 		submitTab.review(cid, isPass, userDao.findOne(userId));
 	}
 
-	public void saveDoc(long userId, UploadRecord doc) throws IOException {
-		Class<?> c;
+	public void saveDoc(long userId, UploadRecord doc) throws IOException { 
 		SubmitTab submitTab = null;
 		try {
-			c = Class.forName("com.jxufe.ctdms.reflect.SubmitTab"
-					+ captureName(doc.getTab()));
-			submitTab = (SubmitTab) c.newInstance();
+			submitTab = SubmitTab.getInstanceByTab(doc.getTab()); 
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException e) {
 			e.printStackTrace();
@@ -182,16 +161,20 @@ public class DocServiceImpl implements DocService {
 			}
 		}
 	}
-
+	/**
+	 * TODO 重构.
+	 */
+	/**
+	 * 1.检查当前学期是否已上传  
+	 * 2.已上传则先删除本学期 所有课程, 未上传进入下一步
+	 * 3.导入课程,教师
+	 */
 	@Override
 	public void parseExcel() {
 		List<ExcelBean> ebs = ExcelParse
 				.parse("E:\\QQ\\QQmessage\\1059654342\\FileRecv\\软通学院本科162学期课表_撤班后.xls");
 		Term term = TermServiceImpl.getNowTerm();
-		// 准备单独的课程 添加到数据库
-		// List<Course> singeCourses = getSingeCourseList(ebs,term);
-		// System.out.println(singeCourses);
-		// courseDao.save(singeCourses);
+
 		List<Course> dbCourses = courseDao.findByTerm(term);
 		List<CourseTeacherTime> ctts = new ArrayList<>();
 		List<Course> saveCourses = new ArrayList<>(); // 准备保存的
@@ -200,58 +183,25 @@ public class DocServiceImpl implements DocService {
 		List<User> saveUsers = new ArrayList<>(); // 准备保存的
 
 		for (ExcelBean eb : ebs) {
-			CourseTeacherTime ctt = new CourseTeacherTime();
-			// 检查数据库是否有相同的
-			Course course = null;
+			CourseTeacherTime ctt = new CourseTeacherTime(); 
+			User user = (User) getEobj(eb.getTeacherName(),saveUsers,dbUsers,User.class);
+ 
+			if (user == null) { 
+				user = new User();
+				user.setRealName(eb.getTeacherName());
+				user.setPassWord("123");
+				user.setUserName(eb.getTeacherName());
+				saveUsers.add(user);
+			} 
 
-			// setEqualsObj(Course.class,saveCourses,course,true,eb.getCourseCode());
-			// setEqualsObj(Course.class,dbCourses,course,false,eb.getCourseCode());
-
-			for (Course c : saveCourses) {
-				if (eb.getCourseCode().equals(c.getCourseCode())) {
-					course = c;
-					break;
-				}
-			}
-			if (course == null) {
-				for (Course c : dbCourses) {
-					if (eb.getCourseCode().equals(c.getCourseCode())) {
-						course = c;
-						break;
-					}
-				}
-			}
+			Course course = (Course) getEobj(eb.getCourseCode(),saveCourses,dbCourses,Course.class);
+ 
 			if (course == null) {
 				course = eb.toCourse();
 				course.setTerm(term);
-				courseDao.save(course);
 				saveCourses.add(course);
 			}
-
-			User user = null;
-			// setEqualsObj(User.class ,
-			// saveUsers,user,true,eb.getTeacherName());
-			// setEqualsObj(User.class ,
-			// dbUsers,user,false,eb.getTeacherName());
-			for (User u : saveUsers) {
-				if (eb.getTeacherName().equals(u.getRealName())) {
-					user = u;
-					break;
-				}
-			}
-			if (user == null) {
-				for (User u : dbUsers) {
-					if (eb.getTeacherName().equals(u.getRealName())) {
-						user = u;
-						break;
-					}
-				}
-			}
-			if (user == null) {
-				user = newUser(eb.getTeacherName());
-				userService.register(user);
-				saveUsers.add(user);
-			}
+			 
 			ctt.setCourse(course);
 			ctt.setShift(eb.getShift());
 			ctt.setCourseTimes(eb.getCourseTimes());
@@ -259,34 +209,54 @@ public class DocServiceImpl implements DocService {
 
 			ctts.add(ctt);
 		}
-
+		 
+		courseDao.save(saveCourses); 
+		userService.registerTearchers(saveUsers);
 		courseTeacherTimeDao.save(ctts);
 	}
 
-	private <T> void setEqualsObj(Class<T> c, List<T> list, T obj,
-			boolean nullable, String str) {
-		// TODO
-		if (nullable == false && obj != null) {
-			return;
-		}
-		for (T o : list) {
-			if (o.equals(str)) {
-				obj = o;
-				return;
+	private <T> Object getEobj(String s, List<T> objs1,List<T>objs2,Class<T>c) { 
+		for (Object o : objs1) {
+			if(o.equals(s)){
+				return o ; 
 			}
 		}
+		for (Object o : objs2) {
+			if(o.equals(s)){
+				return o ; 
+			}
+		}
+		return null;
 	}
-
-	private User newUser(String realName) {
-		User iUser = new User();
-		iUser.setRealName(realName);
-		iUser.setPassWord("123");
-		iUser.setUserName(realName);
-		return iUser;
-	}
-
+ 
 	@Override
 	public String getFilePath(long docId) { 
 		return  uploadRecordDao.findOne(docId).getPath();
 	}
+
+	@Override
+	public List<CompletionDegreeDto> getCompletionDegrees(String tab) {
+		try {
+			SubmitTab submitTab = SubmitTab.getInstanceByTab(tab);
+			submitTab.initDAO(courseDao, courseTeacherTimeDao);
+			return submitTab.completes(userDao);
+		} catch (InstantiationException | IllegalAccessException e) { 
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {  
+			return Collections.emptyList();
+		}
+		return Collections.emptyList(); 
+	}
+
+	@Override
+	public void delete(long userId,String tab, long cid) {
+		try {
+			SubmitTab submitTab = SubmitTab.getInstanceByTab(tab);
+			submitTab.initDAO(courseDao, courseTeacherTimeDao); 
+			submitTab.deleteDoc(cid);
+		} catch (InstantiationException | IllegalAccessException e) { 
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {   
+		}
+	} 
 }

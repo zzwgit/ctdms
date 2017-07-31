@@ -1,5 +1,8 @@
 package com.jxufe.ctdms.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jxufe.ctdms.enums.DocState;
+import com.jxufe.ctdms.utils.ExcelBean;
 
 /**
  * @author 叶志伟 作者 E-mail: 1059654342@qq.com date 创建时间：2017年4月17日 下午10:31:40
@@ -34,7 +39,7 @@ public class Course {
  
 	@OneToOne(cascade=CascadeType.REFRESH)
 	private UploadRecord uploadRecord;
-	
+	 
 	@Column(length = 25, nullable = false)
 	private String courseName;
 	@Column(length = 10, nullable = false, unique = true)
@@ -49,13 +54,19 @@ public class Course {
 		return courseCode + "-["  + "]:" + courseName + ":"
 				 + ":";
 	}
-
+ 
 	@Override
 	public boolean equals(Object obj) {  
 		if (this == obj)
 			return true;
 		if (obj == null)
+			return false; 
+		if(obj instanceof ExcelBean){
+			if(this.courseCode.equals(((ExcelBean)obj).getCourseCode())){
+				return true;
+			}
 			return false;
+		}
 		if (obj instanceof String){ 
 			if(this.courseCode.equals((String)obj)){
 				return true;
@@ -111,7 +122,7 @@ public class Course {
 		this.term = term;
 	}
  
-
+ 
 	public String getCourseName() {
 		return courseName;
 	}

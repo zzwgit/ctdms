@@ -38,15 +38,9 @@ public class User {
 	@JoinTable(name = "USER_USER_PROFILE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
 	private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
 
-	
-	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,mappedBy="user")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
 	List<UploadRecord> uploadRecords;
-	
-	// @ManyToMany(fetch = FetchType.EAGER)
-	// @JoinTable(name = "USER_COURSE", joinColumns = { @JoinColumn(name =
-	// "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "COURSE_ID") })
-	// private List<Course> courses = new ArrayList<>();
-
+ 
 	@Override
 	public String toString() {
 		return userId + "-" + userName + "-" + passWord;
@@ -98,6 +92,14 @@ public class User {
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	} 
+
+	public List<UploadRecord> getUploadRecords() {
+		return uploadRecords;
+	}
+
+	public void setUploadRecords(List<UploadRecord> uploadRecords) {
+		this.uploadRecords = uploadRecords;
 	}
 
 	@Override

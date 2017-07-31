@@ -12,11 +12,11 @@ import com.jxufe.ctdms.bean.Notices;
 import com.jxufe.ctdms.bean.NoticesType;
 import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.bean.UserProfile;
-import com.jxufe.ctdms.bean.UserProfileType;
 import com.jxufe.ctdms.dao.NoticesDao;
 import com.jxufe.ctdms.dao.NoticesTypeDao;
 import com.jxufe.ctdms.dao.UserDao;
 import com.jxufe.ctdms.dto.NoticesDto;
+import com.jxufe.ctdms.enums.UserProfileType;
 import com.jxufe.ctdms.service.NoticesService;
 import com.jxufe.ctdms.utils.DateFormat;
 

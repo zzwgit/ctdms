@@ -2,10 +2,10 @@ package com.jxufe.ctdms.enums;
  
 public enum DocState {
 	NOT_SUBMIT(0,"未提交","no-submit"),
-	WAIT_REVIEW(4,"等审核","wait"),
-	PASS_1(7,"过初核","pass-1"),
+	WAIT_REVIEW(4,"待审核","wait"),
+	PASS_1(7,"待终审","pass-1"),
 	//PASS_2(11,"通过第二次审核"),
-	PASS_FINAL(19,"过终核","pass-2"),
+	PASS_FINAL(19,"已通过","pass-2"),
 	FAIL(-2,"失败","fail");
 	
 	private int stateId;
