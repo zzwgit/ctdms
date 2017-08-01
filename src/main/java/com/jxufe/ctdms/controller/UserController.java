@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.jxufe.ctdms.bean.User;
-import com.jxufe.ctdms.dao.UserDao;
+import com.jxufe.ctdms.dto.AjaxResult;
 import com.jxufe.ctdms.service.UserService;
  
 
@@ -38,7 +39,9 @@ public class UserController {
 		System.out.println("login");
 		return "";
 	 }  
-	
+	/**
+	 * 用户登录 
+	 */
 	@RequestMapping(value = {"/","/login"}, method = RequestMethod.GET)
 	public ModelAndView loginPage(
 			@RequestParam(value = "error", required = false) String error, 
@@ -52,8 +55,10 @@ public class UserController {
 		modelv.setViewName("login");
 		return modelv;
 	}
-	
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	/**
+	 *  退出登录
+	 */
+	@RequestMapping(value = "{userId}/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request,
 			HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext()
@@ -63,35 +68,73 @@ public class UserController {
 		}
 		return "redirect:/login?logout";
 	}
-	
+	/**
+	 *  获得用户管理界面
+	 */
 	@RequestMapping(value = "{userId}/users", method = RequestMethod.GET)
-	public String usersPage(@PathVariable("userId")long userId) { 
+	public String usersPage(@PathVariable("userId")long userId,
+			Model model) { 
+		model.addAttribute("users", userService.findAll()); 
 		return "users";
 	}
-	
+	/**
+	 *  新增用户
+	 */
 	@RequestMapping(value = "{userId}/users", method = RequestMethod.PUT)
 	@ResponseBody
-	public String addUser(@PathVariable("userId")long userId) {
+	public AjaxResult<String> addUser(@PathVariable("userId")long userId) {
 		
-		return "users";
+		return new AjaxResult<>("success");
 	}
-	@RequestMapping(value = "{userId}/users", method = RequestMethod.POST)
+	/**
+	 *  禁止或启用  用户
+	 */
+	@RequestMapping(value = "{userId}/user/forbid", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateUser(@PathVariable("userId")long userId) {
-		
-		return "users";
+	public AjaxResult<String> banUser(@PathVariable("userId")long userId,
+			@RequestParam(value="id",required=true)long uid,
+			@RequestParam(value="forbid",required=true)int forbid) {
+		userService.forbid(uid,forbid);
+		return new AjaxResult<>("success");
+	}
+	/**
+	 *  删除用户
+	 */
+	@RequestMapping(value = "{userId}/users", method = RequestMethod.DELETE)
+	@ResponseBody
+	public AjaxResult<String> deleteUser(@PathVariable("userId")long userId,
+			@RequestParam(value="id",required=true)long uid) {
+		userService.delete(uid);
+		return new AjaxResult<>("success");
+	}
+	/**
+	 *  修改用户信息
+	 */
+	@RequestMapping(value = "{userId}/user/info", method = RequestMethod.POST)
+	@ResponseBody
+	public AjaxResult<String> updateUser(@PathVariable("userId")long userId,
+			@RequestParam(value="id",required=true)long uid,
+			@RequestParam(value="user",required=true)User user) {
+		userService.modifyInfo(uid,user); 
+		return new AjaxResult<>("success");
 	}
 	
-	@RequestMapping(value = "/users", method = RequestMethod.DELETE)
+	/**
+	 *  修改用户密码
+	 */
+	@RequestMapping(value = "{userId}/user/pass", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteUser() {
-		
-		return "users";
+	public AjaxResult<String> passUser(@PathVariable("userId")long userId,
+			@RequestParam(value="id",required=true)long uid,
+			@RequestParam(value="pass",required=true)String passWord) {
+		userService.modifyPassword(uid,passWord); 
+		return new AjaxResult<>("success");
 	}
-	
+	/**
+	 * 注册后自动登录
+	 */
 	@Autowired
-	@Qualifier("org.springframework.security.authenticationManager")
-	// 注册后自动登录
+	@Qualifier("org.springframework.security.authenticationManager") 
 	protected AuthenticationManager authenticationManager; 
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)

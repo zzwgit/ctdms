@@ -29,6 +29,11 @@ a {
 td,th {
 	text-align: center;
 }
+table {
+min-width:550px; 
+} 
+ 
+
 </style>
 </head>
 <body > 
@@ -122,13 +127,27 @@ td,th {
 <script type="text/javascript" src="<%=basePath%>js/tab.js"></script> 
 <script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/toTop.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/jquery.loadBar.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/schedule.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
 		var tab = getUrlFrame('tab');
 		document.getElementById(tab).className = "active";
-		
-		ajax('status_all',tab);
+		// main color
+		loadBar.mainColor = 'red';  
+		 
+		// strip color
+		loadBar.stripColor = '#444';  
+		 
+		// animation speed
+		loadBar.barSpeed = 15; 
+		 
+		// bar height
+		loadBar.barHeight = 5;
+    	loadBar.trigger('show'); 
+		ajax('status_all',tab,function(){
+	    	loadBar.trigger('hide');
+		});
 	}; 
 	
 	

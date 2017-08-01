@@ -16,4 +16,12 @@ public interface UserService {
 	List<User> findAll();
 	
 	List<CourseTeacherTime> getCTT(long userId);
+
+	void forbid(long uid, int forbid);
+
+	void delete(long uid);
+
+	void modifyPassword(long uid, String passWord);
+
+	void modifyInfo(long uid, User user);
 }

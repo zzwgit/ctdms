@@ -1,7 +1,6 @@
 			body {
 				margin: 0;
-				padding: 0; 
-				background: #F7F7F8;
+				padding: 0;  
 				font-family: "微软雅黑";
 				overflow: scroll;
 				white-space:nowrap; 
@@ -54,7 +53,7 @@
 			    min-width: 105px;
 			    max-width: 205px;
 			    height: 30px;
-			    margin: 4px 90px 4px 12px; 
+			    margin: 4px 0px 4px 12px; 
 			    width: 21%; 
 			    position: relative;   
 			    float:right;

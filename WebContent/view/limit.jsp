@@ -7,9 +7,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 <head> 
 <title></title>
-<link rel="stylesheet" href="css/bootstrap-datepicker.min.css" />
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/limitDate.css" />
+<link rel="stylesheet" href="<%=basePath%>css/bootstrap-datepicker.min.css" />
+<link rel="stylesheet" href="<%=basePath%>css/bootstrap.min.css"> 
+<style>
+
+.dateMessage_carry{
+	width:400px;
+	padding: 30px;
+	height: 400px;
+	margin:0px auto  ; 
+}
+.form-group .btn-primary{ 
+	width: 30%;
+}</style>
 </head>
 <body>
 	<div class="dateMessage_carry">
@@ -43,15 +53,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	</div>
 </body>
-<script
-	src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
- 	
+
+<script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script> 
+
 <script
 	src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript"
-	src="js/bootstrap-datepicker.zh-CN.min.js"></script>
+	src="<%=basePath%>js/bootstrap-datepicker.zh-CN.min.js"></script>
 
 <script> 
 		function dateReplace(e){

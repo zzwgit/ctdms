@@ -140,6 +140,7 @@
 <script type="text/javascript" src="<%=basePath%>js/jquery-form.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/ToProgress.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/tab.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/layer/layer.js" ></script>
 <script>
 	//进度条
 	var options = {
@@ -159,9 +160,12 @@
 			success : function(data) {
 				if (data == 'error' || data.percent == "100") {
 					window.clearInterval(oTimer); //清除定时器
-					window.location.reload(); 	  
+					layer.msg('上传成功', {icon: 1},function(){ 
+	        			location.reload(true);   
+	        		});   
 				}else{
 					topbar.setProgress(data.percent);
+					layer.msg('上传失败', {icon: 5});  
 				}
 			},
 			error : function(err) { 
@@ -205,21 +209,30 @@
 	};
 	
 	function _delete(cid){
-		$.ajax({
-			url : "doc",
-			type:'post',
-			data : {
-				${_csrf.parameterName}:"${_csrf.token}",
-				_method:'delete',
-				id:cid,
-				tab : getUrlFrame('tab')
-			},
-			success : function(data) {
-				window.location.reload(); 
-			},
-			error : function(err) {
-			}
-		}); 
+		layer.confirm('确定要删除吗？', {
+			  btn: ['确定','取消'] //按钮
+			}, function(){ 
+				$.ajax({ 
+					url : "doc",
+					type:'post',
+					data : {
+						${_csrf.parameterName}:"${_csrf.token}",
+						_method:'delete',
+						id:cid,
+						tab : getUrlFrame('tab')
+					},
+					success : function(data) {
+						layer.msg('删除成功', {icon: 1},function(){ 
+		        			location.reload(true);   
+		        		});  
+					},
+					error : function(err) {
+						layer.msg('删除失败', {icon: 5});  
+					}
+				}); 
+			}, function(){ 
+			});
+
 	}
 </script>
 </html>

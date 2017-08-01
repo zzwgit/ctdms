@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.bean.UserProfile;
 import com.jxufe.ctdms.dao.UserDao;
+import com.jxufe.ctdms.utils.DateFormat;
  
 
 public class UserDetailServiceImpl implements UserDetailsService {
@@ -37,7 +38,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		for(UserProfile userProfile : user.getUserProfiles()){
 			authorities.add(new SimpleGrantedAuthority("ROLE_"+userProfile.getType())); 
 		}
-		//System.out.println("authorities :"+authorities);
+		/**
+		 * login 记录
+		 */
+		user.setLoginDate(DateFormat.getFormatDate());
+		user.setLoginTimes(user.getLoginTimes()+1);
+		userDao.save(user);
 		return authorities;
 	}
 

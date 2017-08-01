@@ -2,6 +2,7 @@ package com.jxufe.ctdms.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
+ 
 import com.jxufe.ctdms.bean.UploadRecord;
 import com.jxufe.ctdms.dto.AjaxResult;
 import com.jxufe.ctdms.dto.CompletionDegreeDto;
@@ -86,13 +87,13 @@ public class DocController {
 	 */
 	@RequestMapping(value = "{userId}/review", headers = "Accept=application/json", method = RequestMethod.POST)
 	@ResponseBody
-	public String doreview(
+	public AjaxResult<String> doreview(
 			@PathVariable("userId") long userId,
 			@RequestParam(value = "tab", defaultValue = "teach") String tab,
 			@RequestParam(value = "id", required = true) long cid,
 			@RequestParam(value = "isPass", required = true, defaultValue = "0") int isPass) {
 		docService.review(userId, cid, tab, isPass);
-		return "";
+		return new AjaxResult<>("success");
 	}
 	
 	/**
@@ -130,6 +131,19 @@ public class DocController {
 					headers, HttpStatus.CREATED);  
 	}
 
+	/**
+	 * pdf 预览
+	 */ 
+	  @RequestMapping(value = "/{userId}/pdf", method = RequestMethod.GET,produces="text/html;charset=UTF-8")
+	  @ResponseBody
+	  public String showPdf(
+			  @RequestParam(value = "docId", required=true) long docId
+			  ) { 
+		  String pdfName = null ; 
+		  String url="pdf/"+pdfName;
+		  return url;
+	   }
+	
 	/**
 	 * 上传 排课计划 cp(CoursePlan)
 	 */

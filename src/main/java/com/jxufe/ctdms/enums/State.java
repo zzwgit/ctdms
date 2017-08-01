@@ -1,4 +1,4 @@
-package com.jxufe.ctdms.bean;
+package com.jxufe.ctdms.enums;
 public enum State {
 
 	ACTIVE("Active"),

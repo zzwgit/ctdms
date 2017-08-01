@@ -69,11 +69,42 @@ a {
 </body> 
 
 <script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script> 
-<script type="text/javascript" src="<%=basePath%>js/popwin.js"></script> 
+<script type="text/javascript" src="<%=basePath%>js/layer/layer.js"></script>
 <script type="text/javascript"> 
-	function getDateLayer(){
-		popWin.showWin("600","400","设置上传限制时间","http://www.baidu.com");
-	}
+layer.config({
+	offset : 150,shadeClose : true
+});
+
+function getDateLayer() {
+	layer.open({
+		type : 2,
+		shade : 0.1,
+		title : false, 
+		area : [ '500px', '450px' ],
+		closeBtn : 0,
+		shadeClose : true,
+		skin : 'layui-layer-rim',
+		content : 'limit'
+	});
+}
+
+function getTermLayer() {
+	layer.prompt({
+		title : '修改当前学期为(尚未实现)'
+	}, function(val, index) {
+		layer.msg('得到了' + val);
+		layer.close(index);
+	});
+}
+function getDocTypeLayer() {
+	layer.prompt({
+		title : '可上传文档类型设置(尚未实现)'
+	}, function(val, index) {
+		layer.msg('得到了' + val);
+		layer.close(index);
+	});
+}
+
 </script>
 <link
 	href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"

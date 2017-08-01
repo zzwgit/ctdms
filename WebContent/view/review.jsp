@@ -18,18 +18,9 @@
 .col-md-8 {
 	width: 100%;
 }
-
-.text-explode {
-	color: #CCC !important;
-	font-weight: normal !important;
-	margin: 0px 4px !important;
-}
-
 a {
-	color: #06C;
-	cursor: pointer;
+	color: #06C; 
 }
-
 td,th {
 	text-align: center;
 }
@@ -45,7 +36,7 @@ td,th {
 				    <div class="ctdms-btn-small"><i class="glyphicon glyphicon-ok"></i> 全部通过</div>
 				    <div class="ctdms-btn-small btn-danger"><i class="glyphicon glyphicon-remove"></i> 全部打回</div>
 				</div>
-			</div>
+			</div> 
 			<div class="row">
 				<div class="col-md-8">
 					<div class="tab">
@@ -89,7 +80,7 @@ td,th {
 												<c:forEach var="i"  items="${s.docInfos }"> 
 													<td>${i }</td> 
 												</c:forEach>
-												<td class="re-data" data-timeago="${s.date }"></td> 
+												<td class="re-data" >${s.date }</td> 
 												<td><a class="cback"
 													href="download?docId=${s.docId }">下载</a> <span
 													class="text-explode">|</span> <a class="cpass"
@@ -113,19 +104,22 @@ td,th {
 <script type="text/javascript" src="<%=basePath%>js/tab.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/timeago.js"></script>
-<script type="text/javascript" src="<%=basePath%>plugins/layer/layer.js" ></script>
+<script type="text/javascript" src="<%=basePath%>js/layer/layer.js" ></script>
 <script type="text/javascript">
 	window.onload = function() {
 		var tab = getUrlFrame('tab');
 		document.getElementById(tab).className = "active";
 		
-		timeago().render(document.querySelectorAll('.re-data'), 'zh_CN');
-		timeago().cancel();
+		var list = document.getElementsByClassName('re-data');
+		for (var i=0; i<list.length; i++){  
+			list[i].innerHTML = timeago().format( list[i].innerHTML ,'zh_CN' ); 
+		}  
 	};
 	function review(cid, ctab, pass) {
 		$.ajax({
 			url : "review",
-			type:'post',
+			type:'post', 
+			dataType : "json", 
 			data : {
 				${_csrf.parameterName}:"${_csrf.token}",
 				id : cid,

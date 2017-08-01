@@ -8,7 +8,9 @@
 	<http pattern="/upload" security="none" />
   
 	<http auto-config="true">
-	 
+		  <headers>
+		        <frame-options policy="SAMEORIGIN"/>
+		   </headers>
 		<form-login login-page="/login" login-processing-url="/login2"
 			default-target-url="/notices" username-parameter="userName"
 			password-parameter="passWord" authentication-success-handler-ref="userSuccessHandler"

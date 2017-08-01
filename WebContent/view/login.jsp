@@ -3,9 +3,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>学院教学文档管理系统</title>
+<title>学院教学文档管理系统</title> 
+
 <link rel="stylesheet" href="css/login.css" />
-<link rel="stylesheet" href="css/ctdms.css" />
+<link rel="stylesheet" href="css/ctdms.css" /> 
 </head>
 <body>
 	<div class="wallpaper">
@@ -60,6 +61,13 @@
 		</div>
 	</div>
 </body>
+ <script type="text/javascript" src="js/jquery.min.js"></script> 
+ <script type="text/javascript" src="js/preload.min.js"></script> 
+ <script type="text/javascript">
+ $.pageLoad.PageLoading({
+	 delayTime: 500
+	});
+ </script>
 <!-- 这骚操作 吃电脑配置
 	<script type="text/javascript" src="js/jquery.min.js" ></script>
 	<script type="text/javascript" src="js/ios-parallax.js" ></script>

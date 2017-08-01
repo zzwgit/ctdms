@@ -6,7 +6,7 @@
 		   }); 	
  
 		var jsonData;  
-		function ajax(_url,_tab){
+		function ajax(_url,_tab,complete){
 			var op={
 					url:_url,
 					data:{tab:_tab},
@@ -22,8 +22,8 @@
 				    	setMaxColspan(s,data);
 				     
 				    	completeProByState(0);
-						soft(0);  
-				     
+						soft(0);   
+						complete();
 				    },
 				    error:function(xhr,textStatus){ 
 				    },

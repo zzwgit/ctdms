@@ -1,6 +1,7 @@
 package com.jxufe.ctdms.service.impl;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,8 @@ import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.bean.UserProfile;
 import com.jxufe.ctdms.dao.CourseTeacherTimeDao;
 import com.jxufe.ctdms.dao.UserDao;
+import com.jxufe.ctdms.dto.DocDto;
+import com.jxufe.ctdms.enums.State;
 import com.jxufe.ctdms.enums.UserProfileType;
 import com.jxufe.ctdms.service.UserService;
 
@@ -38,16 +41,13 @@ public class UserServiceImpl implements UserService {
 		System.out.println("注册    "+user); 
 		return user; 
 	}
-	private void setUserInfo(User user) {
-		//用户激活
-		user.setState("Active");			
+	private void setUserInfo(User user) { 
 		//分配权限  默认用户
 		Set<UserProfile> userProfiles = new HashSet<>(); 
 		userProfiles.add(new UserProfile(UserProfileType.TEACHER.getProfileTypeId(),UserProfileType.TEACHER.getUserProfileType()));
 		userProfiles.add(new UserProfile(UserProfileType.USER.getProfileTypeId(),UserProfileType.USER.getUserProfileType()));
 		user.setUserProfiles(userProfiles);  
-		user.setPassWord(passwordEncoder.encode(user.getPassWord())); 
-		 
+		user.setPassWord(passwordEncoder.encode(user.getPassWord()));  
 	}
 	@Override
 	public void registerTearchers(List<User>users){
@@ -62,12 +62,45 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	public List<User> findAll() { 
-		return userDao.findAll();
+		List<User> users =  userDao.findAll();
+		Collections.sort(users, new Comparator<User>() {
+            public int compare(User o1, User o2) {
+                return o2.getLoginTimes()-o1.getLoginTimes();
+            }
+		}); 
+		return users;
 	}
 	@Override
 	public List<CourseTeacherTime> getCTT(long userId) { 
 		User user = userDao.findByUserId(userId);
 		return courseTeacherTimeDao.findByUser(user); 
+	}
+	@Override
+	public void forbid(long uid,int forbid) { 
+		User user = userDao.findOne(uid);
+		if(forbid==1){
+			user.setState(State.LOCKED.getState());
+		}else{
+			user.setState(State.ACTIVE.getState());
+		}
+		userDao.save(user); 
+	}
+	@Override
+	public void delete(long uid) {
+		userDao.delete(uid);
+	}
+	@Override
+	public void modifyPassword(long uid, String passWord) {
+		User user = userDao.findOne(uid);
+		user.setPassWord(passwordEncoder.encode(passWord));  
+		userDao.save(user); 
+	}
+	@Override
+	public void modifyInfo(long uid, User user) {
+		User old = userDao.findOne(uid);
+		old.setRealName(user.getRealName());
+		old.setUserName(user.getUserName());
+		userDao.save(old); 
 	}
 
 }

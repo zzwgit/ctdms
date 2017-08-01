@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.jxufe.ctdms.enums.State;
+
 @Entity
 @Table
 public class User {
@@ -31,6 +33,12 @@ public class User {
 	@Column(length = 25, nullable = false)
 	private String realName;
 
+	@Column(nullable = false)
+	private int loginTimes = 0 ; //登陆次数
+	
+	@Column(length = 20 , nullable = false)
+	private String loginDate ="从未登录"; //最后一次登录时间
+	
 	@Column(name = "STATE", nullable = false)
 	private String state = State.ACTIVE.getState();
 
@@ -100,6 +108,22 @@ public class User {
 
 	public void setUploadRecords(List<UploadRecord> uploadRecords) {
 		this.uploadRecords = uploadRecords;
+	}
+
+	public int getLoginTimes() {
+		return loginTimes;
+	}
+
+	public void setLoginTimes(int loginTimes) {
+		this.loginTimes = loginTimes;
+	}
+
+	public String getLoginDate() {
+		return loginDate;
+	}
+
+	public void setLoginDate(String loginDate) {
+		this.loginDate = loginDate;
 	}
 
 	@Override

@@ -18,12 +18,18 @@ public class NoticesController {
 	@Autowired
 	NoticesService noticesService; 
 	
+	/**
+	 * 获得发布通知界面
+	 */
 	@RequestMapping(value="{userId}/Announcement", method = RequestMethod.GET) 
 	public String deliverNotice(@PathVariable("userId") long userId,Model model){
 		model.addAttribute("userId", userId);
 		return "delivernotice";
 	} 
-	//jstl
+	
+	/**
+	 * 显示所有通知
+	 */
 	@RequestMapping(value="{userId}/notices", method = RequestMethod.GET) 
 	public String getNoticesFrame(@PathVariable("userId") long userId,
 			Model model){  
@@ -32,7 +38,9 @@ public class NoticesController {
 		return "notices";
 	} 
 	
- 
+	/**
+	 * 发布通知
+	 */
 	@RequestMapping(value="{userId}/notices", method = RequestMethod.POST) 
 	public String addNotices(@PathVariable("userId") long userId,
 			@RequestParam(value = "level", required = false,defaultValue="0") int level,
