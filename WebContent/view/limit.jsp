@@ -14,28 +14,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 .dateMessage_carry{
 	width:400px;
 	padding: 30px;
-	height: 400px;
+	height: 300px;
 	margin:0px auto  ; 
 }
 .form-group .btn-primary{ 
 	width: 30%;
 }</style>
 </head>
-<body>
+<body  style="padding-top: 50px">
 	<div class="dateMessage_carry">
-		<form class="form-horizontal" id="infoForm"  role="form">
-			<div class="form-group">
-				<label for="name">标题: <span class="label label-warning">选填</span></label>
-				<input type="text" class="form-control" id="title" name="title"
-					placeholder="请输入标题">
-			</div>
-			<div class="form-group">
-				<label for="name">具体内容: <span class="label label-warning">选填</span></label>
-				<textarea rows="6" class="form-control" id="detail" name="detail"
-					placeholder="请输入具体内容"></textarea> 
-			</div>
+		<form class="form-horizontal" id="infoForm" >
+			<div class="form-group"  style="margin-bottom: 100px">
+				<label for="name">选择文档类型: <span class="label label-warning">必填</span></label>
+				    <select class="form-control" id="type-select">
+					      <option value="all">全部</option>
+					      <option value="teach">教学进度表</option>
+					      <option value="syllabus">教学大纲</option>
+					      <option value="other">其他</option>
+					</select> 
+			</div> 
 
-			<div class="form-group">
+			<div class="form-group"  style="margin-bottom: 30px">
 				<label for="name">提交文档日期范围: <span class="label label-danger">必填</span></label>
 				<div class="input-daterange input-group" id="datepicker">
 					<input type="text" class="form-control" name="start" id="qBeginTime" placeholder="开始日期"/> 
@@ -44,8 +43,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 
-			<div class="form-group">
-				<button type="button" class="btn btn-primary"
+			<div class="form-group" >
+				<button type="button" class="btn btn-primary" style="display: block;margin:15px auto;"
 					onclick="javascript:Submit();" class="btn btn-default">确定</button>
 			</div>
 		</form>
@@ -57,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script> 
 
 <script
-	src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	src="<%=basePath%>js/bootstrap.min.js"></script>
 
 <script type="text/javascript" src="<%=basePath%>js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript"
@@ -77,28 +76,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				alert("请选择日期");
 				return;
 			} 
-			var start = dateReplace(beginVal);
-			var end = dateReplace(endVal);
-			console.log(start+"  "+end); 
+			var _start = dateReplace(beginVal);
+			var _end = dateReplace(endVal); 
 			
-			var title = $("#title").val();
-			var detail = $("#detail").val();
-			if(title.length<=0)
-				title='...';
-			if(detail.length<=0)
-				detail='...';
-		    var url="setLimitDate";
-		    url+="?title="+title+"&detail="+detail;
-		    url+="&start="+start+"&end="+end;
+			var type = $('#type-select option:selected').val(); 
+			console.log(type); 
+		    var url="limit"; 
+		    var data = {
+		    		${_csrf.parameterName}:"${_csrf.token}",
+		    		tab : type,
+		    		start : _start,
+		    		end : _end
+		    };
 		    console.log(url); 
-		    ajaxSubmit(url);
+		    ajaxSubmit(url,data);
 		} 
-		function ajaxSubmit(url){ 
+		function ajaxSubmit(_url,_data){ 
 		      	var options = {  
-	         		url:url,
-	         		type : "post", 
+	         		url:_url,
+	         		type : "post",
+	         		data:_data,
+	    			dataType : "json", 
 	        	    success: function (data) {  
-	        	    	parent.window.location.href="limitDate"; 
+	        	    	parent.window.location.href="setting"; 
 	                },
 	                error: function (data){ 
 	                  $(".btn-default").html('确定');

@@ -4,9 +4,7 @@
 	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security.xsd">
-  
-	<http pattern="/upload" security="none" />
-  
+   
 	<http auto-config="true">
 		  <headers>
 		        <frame-options policy="SAMEORIGIN"/>

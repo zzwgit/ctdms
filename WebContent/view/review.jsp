@@ -24,6 +24,9 @@ a {
 td,th {
 	text-align: center;
 }
+.form-control{
+	width:76px;
+}
 </style>
 </head>
 <body> 
@@ -55,13 +58,7 @@ td,th {
 								<table class="table table-hover">
 									<thead>
 										<tr>
-											<th style="text-align: left;"><select class="select-primary">
-													<option value="all" selected>全部</option>
-													<option value="unsub">未提交</option>
-													<option value="wait">待审核</option>
-													<option value="pass">已通过</option>
-													<option value="failure">未通过</option>
-											</select></th>
+											<th>状态</th>
 											<th>课程</th>
 											<c:if test="${(tab)!= null && tab=='teach' }">
 												<th>班次</th>
@@ -74,7 +71,7 @@ td,th {
 									<tbody>
 										<c:forEach var="s" items="${docs }">
 											<tr>
-												<td style="text-align: left;">待审核</td>
+												<td>待审核</td>
 												<td><a class="cin" href="javascript:openPDF('')">${s.name }</a>
 												</td>
 												<c:forEach var="i"  items="${s.docInfos }"> 

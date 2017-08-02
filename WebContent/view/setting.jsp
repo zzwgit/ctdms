@@ -26,20 +26,24 @@ a {
 		<div class="container module-frame" id="iframe">
 			<div class="frame-title">
 				<h5>设置</h5> 
+				
 			</div> 
 			
 			<div class="module-toolbar">
 		<div class="toolbar-left">
 		
-		<div class="ctdms-btn-small" onclick="getTermLayer()">
+		<div class="upload-button-blue" onclick="getTermLayer()">
+		<span class="button-contain">
 		<i class="fa fa-retweet fa-lg"></i>
-		 更新当前学期</div> 
+		<div class="text">
+		 更新当前学期</div>
+		 </span></div> 
 		 
-		<div class="ctdms-btn-small uploadBtn file">
-		<form class="uploadForm " enctype="multipart/form-data">
-		<i class="fa fa-upload fa-lg"></i>
-		 上传排课计划
-		  <input type="file"name="file" />
+		<div class="ctdms-btn-small file">
+		  <form class="uploadForm" action="<%=basePath %>cp?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data" >
+			<i class="fa fa-upload fa-lg"></i>
+		 	上传排课计划
+		  <input type="file"name="file"  /> 
 		 </form>
 		 </div> 
 		  
@@ -63,12 +67,24 @@ a {
 			</div>
 		</div>
 	</div>
-			
+			<table class="table table-hover">
+				<caption>操作历史记录</caption>
+				<thead>
+					<tr>
+						<th>操作<th>
+						<th>内容</th>
+						<th>用户名<th>
+						<th>时间<th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
 			
 		</div>  
 </body> 
 
 <script type="text/javascript" src="<%=basePath%>js/jquery.min.js"></script> 
+<script type="text/javascript" src="<%=basePath%>js/jquery-form.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/layer/layer.js"></script>
 <script type="text/javascript"> 
 layer.config({
@@ -80,7 +96,7 @@ function getDateLayer() {
 		type : 2,
 		shade : 0.1,
 		title : false, 
-		area : [ '500px', '450px' ],
+		area : [ '500px', '500px' ],
 		closeBtn : 0,
 		shadeClose : true,
 		skin : 'layui-layer-rim',
@@ -104,7 +120,42 @@ function getDocTypeLayer() {
 		layer.close(index);
 	});
 }
+function bindSubmit() {
+	$('.uploadForm').bind("submit", function() {
+		layer.load();
+		var options = {
+			dataType : "json", 
+			type : "post",
+			success : function(data) {
+				layer.closeAll('loading');
+				layer.msg('上传成功', {icon: 1},function(){ 
+        			location.reload(true);   
+        		});   
+			},
+			error : function(data){
+				 layer.closeAll('loading');
+				 layer.msg('上传失败', {icon: 5});  
+			}
+		};
+		$(this).ajaxSubmit(options); 
+		return false;
+	});
+}
+function change() {
+	$(".uploadForm").on("change", "input[type='file']", function() {
+		var filePath = $(this).val();
+		console.log(filePath);
+		if (filePath.indexOf("xls") != -1) {
+			$(this).parent().submit();
+		}
+		return false;
+	});
+}
 
+window.onload = function() { 
+	bindSubmit();
+	change();
+};
 </script>
 <link
 	href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"

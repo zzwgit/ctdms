@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -30,14 +32,18 @@ public class CourseTeacherTime {
 	@Column(name = "id")
 	private long id;
 	
-	@OneToOne(cascade=CascadeType.REFRESH)
+	@OneToOne(cascade=CascadeType.REMOVE)
 	private Course course;
 	
 	@Column(nullable = false)
 	private int state = DocState.NOT_SUBMIT.getStateId();  ;  // 每个班次的教学进度表的状态 
 	
-	@OneToOne(cascade=CascadeType.REFRESH)
+	@OneToOne(cascade=CascadeType.REMOVE)
 	private UploadRecord uploadRecord;
+	
+	@ManyToOne
+	@JoinColumn(name = "term_id")
+	private Term term; // 学期
 	
 	@Column(length=10,nullable=false)
 	private String shift;
@@ -65,6 +71,16 @@ public class CourseTeacherTime {
 		this.user = user;
 	}
 
+	@JsonIgnore
+	public Term getTerm() {
+		return term;
+	}
+
+	public void setTerm(Term term) {
+		this.term = term;
+	}
+	
+	@JsonIgnore
 	public UploadRecord getUploadRecord() {
 		return uploadRecord;
 	}

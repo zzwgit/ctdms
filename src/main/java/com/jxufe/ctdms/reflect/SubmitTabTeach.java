@@ -7,31 +7,51 @@ import java.util.List;
 
 import com.jxufe.ctdms.bean.Course;
 import com.jxufe.ctdms.bean.CourseTeacherTime;
+import com.jxufe.ctdms.bean.LimitDate;
 import com.jxufe.ctdms.bean.UploadRecord;
 import com.jxufe.ctdms.bean.User;
-import com.jxufe.ctdms.dao.CourseTeacherTimeDao;
+import com.jxufe.ctdms.dao.LimitDateDao;
 import com.jxufe.ctdms.dto.CompletionDegreeDto;
 import com.jxufe.ctdms.dto.DocDto;
 import com.jxufe.ctdms.dto.Schedule;
 import com.jxufe.ctdms.enums.DocState;
+import com.jxufe.ctdms.service.impl.TermServiceImpl;
+import com.jxufe.ctdms.utils.DateFormat;
 
 public class SubmitTabTeach extends SubmitTab {
 
 	@Override
 	public List<DocDto> getDocDtos(Object obj, User user) {
-		CourseTeacherTimeDao dao = (CourseTeacherTimeDao) obj;
-		String time = "2017-04-28 23:00:00";
-		List<CourseTeacherTime> ctts = dao.findByUser(user);
+		LimitDateDao dao = (LimitDateDao) obj;
+		long termId = TermServiceImpl.getNowTerm().getTermId();
+		LimitDate limit = dao.findByTabAndIsWorkAndTerm("all", 1 , termId);
+		if(limit==null){
+			limit = dao.findByTabAndIsWorkAndTerm("teach", 1 , termId);
+		}
+		String start,end ,isTimeUp = "no";
+		if(limit==null){
+			start = end = "无时间限制";
+		}else{
+			start = limit.getStart() +" 00:00:00";
+			end   = limit.getEnd() +" 00:00:00";
+			long now = System.currentTimeMillis();
+			if(DateFormat.timeStringToMillisSec(start ) > now ||
+					now > DateFormat.timeStringToMillisSec(end )){
+						isTimeUp = "yes";
+					}
+		}
+		List<CourseTeacherTime> ctts = courseTeacherTimeDao.findByUser(user);
 		for (CourseTeacherTime ctt : ctts) {
 			List<String> strs = new ArrayList<>();
 			strs.add("代码: " + ctt.getCourse().getCourseCode());
 			strs.add("班次: " + ctt.getShift());
-			strs.add("开始时间: " + time);
-			strs.add("结束时间: " + time);
+			strs.add("开始时间: " + start);
+			strs.add("结束时间: " + end);
 			DocDto dd = new DocDto(strs, ctt.getState(), ctt.getCourse()
 					.getCourseName());
 			dd.setType("doc");
 			dd.setId(ctt.getId());
+			dd.setIsTimeUp(isTimeUp);
 			docDtos.add(dd);
 		}
 		return docDtos;

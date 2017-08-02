@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>  
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html> 
 	<head> 
@@ -76,59 +77,75 @@
 		</nav>  
 		<div class="hide-logo">这是一个隐藏的logo</div>
 		<div class="module-nav"  >
-			<ul class="list-group" id="left_nav"> 
+			<ul class="list-group" id="left_nav">  
 				<li class="list-group-item" id="notices">
 					<a href="notices">
 						<span class="glyphicon glyphicon-comment"></span> 学院通知
 					</a>
 				</li>
+				<sec:authorize access="hasRole('TEACHER')">
 				<li class="list-group-item" id="course">
 					<a href="course">
 						<span class="glyphicon glyphicon-list-alt"></span> 我的课程
 					</a>
 				</li>
+				</sec:authorize>
+				<sec:authorize access="hasRole('TEACHER')">
 				<li class="list-group-item" id="submit">
 					<a href="submit">  
 						<span class="glyphicon glyphicon-tasks"></span> 待提交
-						<span class="badge pull-right">22</span>
+						<span class="badge pull-right">new</span>
 					</a>
 				</li>
+				</sec:authorize>
+				<sec:authorize  access="hasAnyRole('DIRECTOR','DEAN','ADMIN')">
 				<li class="list-group-item" id="review">
 					<a href="review">
 						<span class="glyphicon glyphicon-folder-close"></span> 待审核
 					</a>
 				</li> 
+				</sec:authorize>
+				<sec:authorize access="hasAnyRole('DIRECTOR','DEAN','ADMIN')">
 				<li class="list-group-item" id="status">
 					<a href="status">
 						<span class="glyphicon glyphicon-eye-open"></span> 提交情况
 					</a>
 				</li>
+				</sec:authorize>
+				<sec:authorize access="hasRole('TEACHER')">
 				<li class="list-group-item" id="declaration">
 					<a href="declaration">
 						<span class="glyphicon glyphicon-book"></span> 教材申报
 					</a>
 				</li>
+				</sec:authorize>
+				<sec:authorize access="hasAnyRole('SECRETARY','ADMIN')">
 				<li class="list-group-item" id="setting">
 					<a href="setting">
 						<span class="glyphicon glyphicon-cog"></span> 设置
 					</a>
 				</li>
+				</sec:authorize>
+				<sec:authorize access="hasAnyRole('DIRECTOR','DEAN','SECRETARY','ADMIN')">
 				<li class="list-group-item" id="Announcement">
 					<a href="Announcement">
 						<span class="glyphicon glyphicon-send"></span> 发布通知
 					</a>
 				</li>
+				</sec:authorize>
+				<sec:authorize access="hasAnyRole('SECRETARY','ADMIN')">
 				<li class="list-group-item" id="users">
 					<a href="users">
 						<span class="glyphicon glyphicon-wrench"></span> 用户信息
 					</a>
 				</li>
-
-				<li class="list-group-item" id="statistics">
+				</sec:authorize>
+				<li class="list-group-item" id="statistics" style="border-bottom: 2px solid #d8dfea; ">
 					<a href="statistics">
 						<span class="glyphicon glyphicon-signal"></span> 统计信息
 					</a>
 				</li>
+				
 				<li class="list-group-item" id="docs">
 					<a href="docs">
 						<span class="glyphicon glyphicon-cloud"></span> 我的文档

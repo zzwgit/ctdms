@@ -102,16 +102,19 @@
 												<div class="fileicon ${s.type }-small" ></div>
 											</span>
 											<c:choose> 
+											 <c:when test="${s.isTimeUp == 'yes'}">
+												<div class="ctdms-btn"> 
+												无法操作
+												</div>
+											 </c:when>
 											 <c:when test="${s.state == 0}">
-											<form class="uploadForm"   action="<%=basePath %>upload" method="post" enctype="multipart/form-data">
-											
+											<form class="uploadForm"   action="<%=basePath %>upload?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data">
 												<input type="hidden" name="id"  value="${s.id }" /> 
 												<input type="hidden" name="userId"  value="${userId }" /> 
 												<input type="hidden" name="tab" value="${tab }" /> 
 												<div class="btn btn-primary btn-large btn-block file uploadBtn"> 
 												上传  
 												<input type="file" name="file" /> 
-												<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />  
 												</div>  
 											</form>
 											</c:when> 
@@ -149,7 +152,7 @@
 		duration : 0.2,
 		height : '3px'
 	};
-	var topbar = new ToProgress(options);
+	var topbar;
 	//获得上传进度
 	var oTimer;
 	function getProgress() {
@@ -157,18 +160,17 @@
 			url : "progress",
 			dataType : "json",
 			type: 'get',
-			success : function(data) {
-				if (data == 'error' || data.percent == "100") {
+			success : function(data) { 
+				topbar.setProgress(data.percent);
+				if (data.percent == "100") {
 					window.clearInterval(oTimer); //清除定时器
 					layer.msg('上传成功', {icon: 1},function(){ 
 	        			location.reload(true);   
 	        		});   
-				}else{
-					topbar.setProgress(data.percent);
-					layer.msg('上传失败', {icon: 5});  
-				}
+				} 
 			},
-			error : function(err) { 
+			error : function(err) {  
+				layer.msg('上传失败', {icon: 5});  
 				window.clearInterval(oTimer); //清除定时器	 
 			}
 		});
@@ -204,6 +206,7 @@
 		var tab = getUrlFrame('tab');
 		document.getElementById(tab).className = "active";
 
+		topbar = new ToProgress(options); 
 		bindSubmit();
 		change();
 	};

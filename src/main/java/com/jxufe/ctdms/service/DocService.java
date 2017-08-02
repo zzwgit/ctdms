@@ -3,6 +3,8 @@ package com.jxufe.ctdms.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.jxufe.ctdms.bean.UploadRecord;
 import com.jxufe.ctdms.dto.CompletionDegreeDto;
 import com.jxufe.ctdms.dto.DocDto;
@@ -13,7 +15,7 @@ public interface DocService {
 	public static String UPLOAD_FILE = "upload/"; 
 	public static String PDF_FILE = "pdf/"; 
 	
-	void parseExcel();
+	void parseLocalExcel();
 	
 	List<DocDto> getWaitSubDocByTab(String tab,long userId);
 	
@@ -27,4 +29,6 @@ public interface DocService {
 	public String getFilePath(long docId);
 
 	void delete(long userId,String tab, long cid);
+
+	void cp(MultipartFile file)  throws IOException;
 }

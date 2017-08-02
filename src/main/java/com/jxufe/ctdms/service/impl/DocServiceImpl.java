@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,7 @@ import com.jxufe.ctdms.bean.User;
 import com.jxufe.ctdms.dao.CourseDao;
 import com.jxufe.ctdms.dao.CourseTeacherTimeDao;
 import com.jxufe.ctdms.dao.DocTypeDao;
+import com.jxufe.ctdms.dao.LimitDateDao;
 import com.jxufe.ctdms.dao.UploadRecordDao;
 import com.jxufe.ctdms.dao.UserDao;
 import com.jxufe.ctdms.dto.CompletionDegreeDto;
@@ -31,7 +33,9 @@ import com.jxufe.ctdms.utils.ExcelBean;
 import com.jxufe.ctdms.utils.ExcelParse;
 import com.jxufe.ctdms.utils.Zip;
 
+
 @Service
+@Transactional
 public class DocServiceImpl implements DocService {
 
 	@Autowired
@@ -46,12 +50,14 @@ public class DocServiceImpl implements DocService {
 	UploadRecordDao uploadRecordDao;
 	@Autowired
 	DocTypeDao docTypeDao;
-
+	@Autowired
+	LimitDateDao limitDateDao;
 	@Override
 	public List<DocDto> getWaitSubDocByTab(String tab, long userId) {
 		try {
 			SubmitTab submitTab = SubmitTab.getInstanceByTab(tab); 
-			return submitTab.getDocDtos(courseTeacherTimeDao,
+			submitTab.initDAO(courseDao, courseTeacherTimeDao);
+			return submitTab.getDocDtos(limitDateDao,
 					userDao.findOne(userId));
 		} catch (ClassNotFoundException e) {
 			return Collections.emptyList();
@@ -137,17 +143,19 @@ public class DocServiceImpl implements DocService {
 	}
 
 	/**
+	 * TODO
 	 * 获得本地文件路径
 	 */
-	private void getLocalFilePath() {
-		// TODO
+	protected void getLocalFilePath() {
+		 
 	}
 
 	/**
+	 * TODO
 	 * 解压后返回给客户端
 	 */
-	private void getLocalFileByPath() {
-		// TODO
+	protected void getLocalFileByPath() {
+		
 		new Zip().decompression();
 	}
 
@@ -160,31 +168,34 @@ public class DocServiceImpl implements DocService {
 				System.out.println(directory.getAbsolutePath());
 			}
 		}
+	} 
+	@Override
+	public void parseLocalExcel() {
+		List<ExcelBean> ebs = ExcelParse
+				.parse("E:\\QQ\\QQmessage\\1059654342\\FileRecv\\软通学院本科162学期课表_撤班后.xls");
+		parse(ebs);
 	}
-	/**
-	 * TODO 重构.
-	 */
 	/**
 	 * 1.检查当前学期是否已上传  
 	 * 2.已上传则先删除本学期 所有课程, 未上传进入下一步
 	 * 3.导入课程,教师
 	 */
-	@Override
-	public void parseExcel() {
-		List<ExcelBean> ebs = ExcelParse
-				.parse("E:\\QQ\\QQmessage\\1059654342\\FileRecv\\软通学院本科162学期课表_撤班后.xls");
+	private void parse(List<ExcelBean> ebs) {
 		Term term = TermServiceImpl.getNowTerm();
-
-		List<Course> dbCourses = courseDao.findByTerm(term);
+		
+		courseTeacherTimeDao.deleteByTerm(term);
+		courseTeacherTimeDao.flush(); 
+		
 		List<CourseTeacherTime> ctts = new ArrayList<>();
 		List<Course> saveCourses = new ArrayList<>(); // 准备保存的
-
+		
 		List<User> dbUsers = userDao.findAll();
 		List<User> saveUsers = new ArrayList<>(); // 准备保存的
 
 		for (ExcelBean eb : ebs) {
 			CourseTeacherTime ctt = new CourseTeacherTime(); 
-			User user = (User) getEobj(eb.getTeacherName(),saveUsers,dbUsers,User.class);
+			@SuppressWarnings("unchecked")
+			User user =  getEobj(eb.getTeacherName(),User.class,saveUsers,dbUsers);
  
 			if (user == null) { 
 				user = new User();
@@ -194,7 +205,8 @@ public class DocServiceImpl implements DocService {
 				saveUsers.add(user);
 			} 
 
-			Course course = (Course) getEobj(eb.getCourseCode(),saveCourses,dbCourses,Course.class);
+			@SuppressWarnings("unchecked")
+			Course course = getEobj(eb.getCourseCode(),Course.class,saveCourses);
  
 			if (course == null) {
 				course = eb.toCourse();
@@ -206,7 +218,7 @@ public class DocServiceImpl implements DocService {
 			ctt.setShift(eb.getShift());
 			ctt.setCourseTimes(eb.getCourseTimes());
 			ctt.setUser(user);
-
+			ctt.setTerm(term);
 			ctts.add(ctt);
 		}
 		 
@@ -214,18 +226,15 @@ public class DocServiceImpl implements DocService {
 		userService.registerTearchers(saveUsers);
 		courseTeacherTimeDao.save(ctts);
 	}
-
-	private <T> Object getEobj(String s, List<T> objs1,List<T>objs2,Class<T>c) { 
-		for (Object o : objs1) {
-			if(o.equals(s)){
-				return o ; 
+	@SuppressWarnings("unchecked")
+	private <T> T getEobj(String s,Class<T>c, List<T>... objs) { 
+		for (List<T> list : objs) {
+			for (T o : list) {
+				if(o.equals(s)){
+					return o ; 
+				}
 			}
-		}
-		for (Object o : objs2) {
-			if(o.equals(s)){
-				return o ; 
-			}
-		}
+		} 
 		return null;
 	}
  
@@ -258,5 +267,11 @@ public class DocServiceImpl implements DocService {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {   
 		}
+	}
+
+	@Override
+	public void cp(MultipartFile file) throws IOException {
+		parse(ExcelParse.parse(file.getBytes(),file.getOriginalFilename()));
+		 
 	} 
 }

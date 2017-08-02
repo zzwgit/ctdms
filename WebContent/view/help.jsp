@@ -33,7 +33,7 @@
 		<div class="menu">
 			<h3><i class="q-menu-img positionIicon"></i>快速上手</h3>
 			<ul class="ulmenu1">
-				<li><a class="selected" href="#tab1">基础问题</a></li>
+				<li><a class="selected" href="javascript:;">基础问题</a></li>
 				<li><a href="#">仪表盘</a></li>
 				<li><a href="#">事务处理</a></li>
 				<li><a href="#">财务处理</a></li>
@@ -76,9 +76,9 @@
 		
 		<div class="content">
 			<div class="get-menu">
-				<a href="#">帮助中心</a>
+				<a href="javascript:;">帮助中心</a>
 				<span>></span>
-				<a class="A1" href="#">常见问题</a>
+				<a class="A1" href="javascript:;">常见问题</a>
 			</div>
 
 			<div class="menu1 menu_tab">

@@ -147,12 +147,18 @@ public class DocController {
 	/**
 	 * 上传 排课计划 cp(CoursePlan)
 	 */
-	@RequestMapping(value = "/cp", method = {RequestMethod.POST,RequestMethod.GET })
+	@RequestMapping(value = "/cp", method = RequestMethod.POST)
+	@ResponseBody
 	public String addCoursePlan(
-			//@RequestParam(value = "file", required = true) MultipartFile file
+			@RequestParam(value = "file", required = true) MultipartFile file
 			) {
-		docService.parseExcel();
-		return "";
+		try { 
+			docService.cp(file);
+		} catch (IOException e) { 
+			e.printStackTrace();
+			return "fail";
+		}
+		return "success";
 	}
 
 	/**

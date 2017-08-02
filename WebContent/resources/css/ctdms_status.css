@@ -53,10 +53,10 @@
 			    min-width: 105px;
 			    max-width: 205px;
 			    height: 30px;
-			    margin: 4px 0px 4px 12px; 
 			    width: 21%; 
-			    position: relative;   
-			    float:right;
+			    float: right; 
+			    margin: 4px 20px; 
+			    position: relative;    
 			}.bar-search .form-box {
 			    padding-left: 15px;
 			    padding-right: 54px;

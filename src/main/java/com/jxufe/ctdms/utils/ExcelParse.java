@@ -1,6 +1,8 @@
 package com.jxufe.ctdms.utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,11 +22,24 @@ public class ExcelParse {
 	public static void main(String[] args) {
 		System.out.println(parse("E:\\QQ\\QQmessage\\1059654342\\FileRecv\\软通学院本科162学期课表_撤班后.xls"));
 	}
-	public static List<ExcelBean> parse(String ExcelPath) { 
-		List<ExcelBean> list = null; // 作为course 表的信息插入
+	
+	public static List<ExcelBean> parse(String ExcelPath){
+		InputStream stream;
 		try {
-			Workbook workbook = null;
-			InputStream stream = new FileInputStream(ExcelPath);
+			stream = new FileInputStream(ExcelPath);
+		} catch (FileNotFoundException e) { 
+			return Collections.emptyList();
+		}
+		return parseByPath(stream,ExcelPath);
+	} 
+	public static List<ExcelBean> parse(byte[] bytes,String name){ 
+		InputStream stream = new ByteArrayInputStream(bytes); 
+		return parseByPath(stream,name);
+	}
+	private static List<ExcelBean> parseByPath(InputStream stream,String ExcelPath) { 
+		List<ExcelBean> list = null; // 作为course 表的信息插入
+		Workbook workbook = null; 
+		try {  
 			if (ExcelPath.endsWith("xls")) {
 				workbook = new HSSFWorkbook(stream);
 			} else if (ExcelPath.endsWith("xlsx")) {

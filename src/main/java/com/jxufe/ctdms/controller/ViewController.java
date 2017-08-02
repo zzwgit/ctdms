@@ -9,9 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jxufe.ctdms.bean.CourseTeacherTime;
+import com.jxufe.ctdms.bean.LimitDate;
+import com.jxufe.ctdms.dto.AjaxResult;
+import com.jxufe.ctdms.service.SettingService;
 import com.jxufe.ctdms.service.UserService;
 
 /**
@@ -21,8 +25,12 @@ import com.jxufe.ctdms.service.UserService;
  */
 @Controller
 public class ViewController {
+	
 	@Autowired
 	UserService userService;
+	@Autowired
+	SettingService settingService;
+	
 	protected long getUserId(){
 		String userName = null;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -34,7 +42,6 @@ public class ViewController {
 		}
 		return userService.findByUserName(userName).getUserId();
 	} 
-	
 	/**
 	 * 获得设置界面
 	 */
@@ -48,6 +55,22 @@ public class ViewController {
 	@RequestMapping(value = "{userId}/limit", method = RequestMethod.GET)
 	public String limit() { 
 		return "limit";
+	}	    	
+	/**
+	 * 	设置 限制日期  
+	 *  tab : type,		文档类型
+	 * 	start : _start,	开始时间
+	 *	end : _end		结束时间
+	 */ 
+	@RequestMapping(value = "{userId}/limit", method = RequestMethod.POST)
+	@ResponseBody
+	public AjaxResult<String> Plimit(
+			@RequestParam(value="tab",required=true) String tab, 
+			@RequestParam(value="start",required=true) String start, 
+			@RequestParam(value="end",required=true) String end
+			) {  
+		settingService.setLimitDate(new LimitDate(start,end,tab));
+		return new AjaxResult<>("success");
 	}
 	/**
 	 * 获得课程表界面

@@ -72,8 +72,9 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	public List<CourseTeacherTime> getCTT(long userId) { 
-		User user = userDao.findByUserId(userId);
-		return courseTeacherTimeDao.findByUser(user); 
+		User user = userDao.findOne(userId);
+		List<CourseTeacherTime> ctts = courseTeacherTimeDao.findByUser(user); 
+		return ctts;
 	}
 	@Override
 	public void forbid(long uid,int forbid) { 

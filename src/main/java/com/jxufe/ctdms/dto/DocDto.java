@@ -15,7 +15,7 @@ public class DocDto {
 	
 	long id;
 	String date;
-	
+	String isTimeUp="no";
 	int state ; 
 	String stateMsg;
 	String bgcolor;
@@ -53,9 +53,15 @@ public class DocDto {
 		this.state = state; 
 	}
 
-	public String getDate() {
-	return date;
-}
+	public String getIsTimeUp() {
+		return isTimeUp;
+	}
+	public void setIsTimeUp(String isTimeUp) {
+		this.isTimeUp = isTimeUp;
+	}
+		public String getDate() {
+		return date;
+	}
 public void setDate(String date) {
 	this.date = date;
 }
